@@ -34,7 +34,7 @@ export async function GET(
 			source: 'youtube',
 			id: res.data.items[0].id,
 			channelId: res.data.items[0].snippet.channelId,
-			name: res.data.items[0].snippet.title,
+			name: res.data.items[0].snippet.channelTitle,
 			iFrameSrcId: res.data.items[0].id,
 		};
 		return NextResponse.json(data, { status: 200 });
