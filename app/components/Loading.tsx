@@ -1,7 +1,14 @@
-export default function Loading({ margin = '0' }: { margin?: string }) {
+export default function Loading({
+	styleClass,
+	style,
+}: {
+	styleClass?: string;
+	style?: React.CSSProperties;
+}) {
 	return (
 		<svg
-			style={{ margin }}
+			className={styleClass}
+			style={style}
 			xmlns='http://www.w3.org/2000/svg'
 			xmlnsXlink='http://www.w3.org/1999/xlink'
 			x='0px'
@@ -9,7 +16,7 @@ export default function Loading({ margin = '0' }: { margin?: string }) {
 			width='160'
 			height='160'
 			viewBox='0 0 52 105'
-			enable-background='new 0 0 0 0'
+			enableBackground='new 0 0 0 0'
 			xmlSpace='preserve'
 		>
 			<circle fill='#0ff' stroke='none' cx='-18' cy='50' r='6'>
