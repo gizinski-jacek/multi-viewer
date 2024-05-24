@@ -1,0 +1,62 @@
+.navbar {
+	height: 48px;
+	padding: 0.5rem;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	font-weight: bold;
+	gap: 0.5rem;
+	background-color: rgb(var(--navbar-rgb));
+	transform-origin: center;
+	transition: all 0.5s;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 100;
+
+	input,
+	select {
+		height: 100%;
+		font-weight: bold;
+	}
+}
+
+.navbar-hidden {
+	@extend .navbar;
+	transform: translateY(-52px);
+}
+
+.hide-nav-btn {
+	position: absolute;
+	top: calc(48px - 0.5rem);
+	left: 50%;
+	width: 24px;
+	height: 20px;
+	cursor: pointer;
+	transform-origin: center;
+	transition: all 0.5s ease;
+	rotate: x 180deg;
+
+	&:before,
+	&:after {
+		display: block;
+		margin: auto;
+		content: '';
+		width: 10px;
+		height: 2px;
+		background-color: rgb(255, 165, 0);
+		transform: translateX(-3px) translateY(10px) rotate(40deg);
+		transition: all 0.25s ease;
+	}
+
+	&:after {
+		transform: translateX(3px) translateY(8px) rotate(-40deg);
+	}
+}
+
+.show-nav-btn {
+	@extend .hide-nav-btn;
+	rotate: x 0deg;
+	transform: translateY(8px);
+}
