@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import styles from './Navbar.module.scss';
+import { useEffect, useState } from 'react';
 
 interface Props {
 	addVideo: (source: string, userInput: string) => void;
@@ -6,8 +7,9 @@ interface Props {
 }
 
 export default function Navbar({ addVideo, toggleChat }: Props) {
-	const [source, setSource] = useState<string>('twitch');
-	const [userInput, setUserInput] = useState<string>('cct_cs');
+	const [source, setSource] = useState<string>('youtube');
+	const [userInput, setUserInput] = useState<string>('-FFyqea427M');
+	const [showNavbar, setShowNavbar] = useState<boolean>(true);
 
 	function handleSourceChange(e: React.ChangeEvent<HTMLSelectElement>) {
 		const { value } = e.target;
@@ -19,16 +21,30 @@ export default function Navbar({ addVideo, toggleChat }: Props) {
 		setUserInput(value);
 	}
 
+	function toggleNavbarVisibility(e: React.MouseEvent<HTMLElement>) {
+		setShowNavbar((prevState) => !prevState);
+	}
+
+	useEffect(() => {
+		document.documentElement.style.setProperty(
+			'--navbar-height',
+			showNavbar ? '48px' : '0'
+		);
+	}, [showNavbar]);
+
 	return (
-		<nav className='d-flex flex-row justify-content-between'>
+		<nav className={showNavbar ? styles['navbar'] : styles['navbar-hidden']}>
 			<div>MultiViewer</div>
 			<form
-				className='d-flex flex-row align-items-center gap-4'
+				className='d-flex flex-row gap-3'
 				onSubmit={(e) => e.preventDefault()}
 			>
 				<fieldset>
-					<label className='d-none' htmlFor='source'></label>
+					<label className='text-capitalize' htmlFor='source'>
+						Source
+					</label>
 					<select
+						className='ms-1 px-1'
 						id='source'
 						name='source'
 						value={source}
@@ -40,9 +56,11 @@ export default function Navbar({ addVideo, toggleChat }: Props) {
 					</select>
 				</fieldset>
 				<fieldset>
-					<label htmlFor='userInput'>Link/Id</label>
+					<label className='text-capitalize' htmlFor='userInput'>
+						Link/Id
+					</label>
 					<input
-						className='ms-2'
+						className='ms-1 px-1'
 						id='userInput'
 						name='userInput'
 						type='text'
@@ -51,7 +69,7 @@ export default function Navbar({ addVideo, toggleChat }: Props) {
 					/>
 				</fieldset>
 				<button
-					className='btn btn-primary text-capitalize'
+					className='btn btn-primary py-0 px-2 fw-bold text-uppercase'
 					type='button'
 					onClick={() => addVideo(source, userInput)}
 				>
@@ -59,12 +77,16 @@ export default function Navbar({ addVideo, toggleChat }: Props) {
 				</button>
 			</form>
 			<button
-				className='btn btn-primary text-capitalize'
+				className='btn btn-primary py-0 px-2 fw-bold text-uppercase'
 				type='button'
 				onClick={() => toggleChat(source, userInput)}
 			>
 				Chat
 			</button>
+			<div
+				className={showNavbar ? styles['hide-nav-btn'] : styles['show-nav-btn']}
+				onClick={toggleNavbarVisibility}
+			></div>
 		</nav>
 	);
 }
