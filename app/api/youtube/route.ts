@@ -36,6 +36,7 @@ export async function GET(
 			channelId: res.data.items[0].snippet.channelId,
 			name: res.data.items[0].snippet.channelTitle,
 			iFrameSrcId: res.data.items[0].id,
+			livestreamChat: res.data.items[0].snippet.liveBroadcastContent === 'live',
 		};
 		return NextResponse.json(data, { status: 200 });
 	} catch (error: any) {
