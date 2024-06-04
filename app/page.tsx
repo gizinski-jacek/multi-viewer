@@ -10,7 +10,7 @@ import {
 } from './libs/utils';
 import { IFrameWrapper } from './components/IFrameWrapper';
 import Navbar from './components/Navbar';
-import { VideoData } from './libs/types';
+import { Sources, VideoData } from './libs/types';
 import Loading from './components/Loading';
 
 export default function App() {
@@ -20,7 +20,7 @@ export default function App() {
 	const [openChat, setOpenChat] = useState<boolean>(false);
 	const [activeChat, setActiveChat] = useState<VideoData | null>(null);
 
-	async function handleAddVideo(source: string, userInput: string) {
+	async function handleAddVideo(source: Sources, userInput: string) {
 		try {
 			if (fetching) return;
 			setFetching(true);
@@ -34,6 +34,7 @@ export default function App() {
 			}
 			const id = userInput.replace(sourceExtractURIList[source], '');
 			if (videoData.find((vid) => vid.id === id && vid.source === source)) {
+				setFetching(false);
 				return;
 			}
 			const data = await getVideoData(source, id);
@@ -41,6 +42,7 @@ export default function App() {
 			setFetching(false);
 		} catch (error: any) {
 			setError(typeof error === 'string' ? error : 'Unknown error');
+			setFetching(false);
 		}
 	}
 
@@ -51,14 +53,20 @@ export default function App() {
 		}
 		setVideoData((prevState) =>
 			prevState.filter(
-				(vid) => vid.id !== video.id && vid.source === video.source
+				(vid) => vid.id !== video.id && vid.source !== video.source
 			)
 		);
+		if (activeChat?.id === video.id && activeChat.source === video.source) {
+			setActiveChat(null);
+			setOpenChat(false);
+		}
 	}
 
 	function handleChatToggle() {
 		if (!openChat && !activeChat) {
-			setActiveChat(videoData[0]);
+			const chat = videoData.find((v) => v.livestreamChat);
+			if (!chat) return;
+			setActiveChat(chat);
 		}
 		setOpenChat((prevState) => !prevState);
 	}
@@ -83,9 +91,13 @@ export default function App() {
 
 	return (
 		<main className={styles.app}>
-			<Navbar addVideo={handleAddVideo} toggleChat={handleChatToggle} />
-			<div className='flex-fill d-flex flex-row p-3 gap-2'>
-				<div className={videoData.length === 1 ? styles.flex : styles.grid}>
+			<Navbar
+				addVideo={handleAddVideo}
+				toggleChat={handleChatToggle}
+				activeChat={!!videoData.find((v) => v.livestreamChat)}
+			/>
+			<div className='flex-fill d-flex flex-column flex-md-row p-3 gap-2'>
+				<div className={styles['video-list']}>
 					{videoData.map((vid) => (
 						<div key={vid.id} className={styles.video}>
 							<div
@@ -106,20 +118,23 @@ export default function App() {
 						{videoData.length ? (
 							<>
 								<div className={styles['chat-list']}>
-									{videoData.map((vid) => (
-										<div
-											className={`btn p-0 px-1 text-nowrap overflow-hidden ${
-												activeChat?.id === vid.id &&
-												activeChat?.source === vid.source
-													? 'btn-primary'
-													: 'btn-secondary'
-											}`}
-											key={vid.id}
-											onClick={() => handleChangeChat(vid)}
-										>
-											{vid.name}
-										</div>
-									))}
+									{videoData.map(
+										(vid) =>
+											vid.livestreamChat && (
+												<div
+													className={`btn p-0 px-1 text-nowrap overflow-hidden ${
+														activeChat?.id === vid.id &&
+														activeChat?.source === vid.source
+															? 'btn-primary'
+															: 'btn-secondary'
+													}`}
+													key={vid.id}
+													onClick={() => handleChangeChat(vid)}
+												>
+													{vid.name}
+												</div>
+											)
+									)}
 								</div>
 								<div className='flex-fill'>
 									{activeChat && (
