@@ -56,6 +56,35 @@
 	}
 }
 
+.error {
+	width: fit-content;
+	height: fit-content;
+	margin: auto;
+	padding: 1rem;
+	font-size: 2rem;
+	font-weight: bold;
+	text-align: center;
+	background-color: var(--bs-dark);
+	border: 0.5rem solid var(--bs-danger);
+	border-radius: 0.5rem;
+	cursor: pointer;
+}
+
+.error-absolute {
+	@extend .error;
+	width: unset;
+	height: unset;
+	font-size: 1rem;
+	padding: 0.75rem;
+	border-width: 0.25rem;
+	border-radius: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 200;
+}
+
 @media only screen and (min-width: 768px) {
 	.chat {
 		width: 280px;
