@@ -1,9 +1,12 @@
+export type Sources = 'youtube' | 'twitch' | 'twitch-vod';
+
 export interface VideoData {
+	source: Sources;
 	id: string;
-	source: string;
 	channelId: string;
 	name: string;
 	iFrameSrcId: string;
+	livestreamChat: boolean;
 }
 
 export interface YoutubeResponse {
@@ -53,7 +56,7 @@ export interface TwitchAuth {
 	token_type: string;
 }
 
-export interface TwitchVideo {
+export interface TwitchStream {
 	data: [
 		{
 			id: string;
@@ -69,4 +72,31 @@ export interface TwitchVideo {
 			created_at: string;
 		}
 	];
+}
+export interface TwitchVOD {
+	data: [
+		{
+			id: string;
+			stream_id: null;
+			user_id: string;
+			user_login: string;
+			user_name: string;
+			title: string;
+			description: string;
+			created_at: string;
+			published_at: string;
+			url: string;
+			thumbnail_url: string;
+			viewable: string;
+			view_count: number;
+			language: string;
+			type: string;
+			duration: string;
+			muted_segments: {
+				duration: number;
+				offset: number;
+			}[];
+		}
+	];
+	pagination: {};
 }
