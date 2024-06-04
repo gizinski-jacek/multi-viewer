@@ -1,20 +1,13 @@
 .app {
 	min-height: 100vh;
-	min-width: 480px;
+	min-width: 600px;
 	display: flex;
 	flex-direction: column;
 	padding-top: var(--navbar-height);
 	transition: all 0.5s ease;
 }
 
-.flex {
-	flex: 1;
-	display: flex;
-	flex-direction: row;
-	gap: 0.5rem;
-}
-
-.grid {
+.video-list {
 	flex: 1;
 	display: grid;
 	grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -46,9 +39,9 @@
 .chat {
 	display: flex;
 	flex-direction: column;
+	width: 100%;
+	height: 400px;
 	gap: 0.25rem;
-	width: 280px;
-	height: calc(100vh - 2rem - var(--navbar-height));
 
 	.chat-list {
 		display: flex;
@@ -56,7 +49,6 @@
 		gap: 0.25rem;
 		overflow-x: scroll;
 		scrollbar-width: thin;
-		padding-bottom: 0.55rem;
 
 		> div {
 			min-width: 60px;
@@ -64,14 +56,26 @@
 	}
 }
 
+@media only screen and (min-width: 768px) {
+	.chat {
+		width: 280px;
+		height: calc(100vh - 2rem - var(--navbar-height));
+		gap: 0;
+
+		.chat-list {
+			padding-bottom: 0.5rem;
+		}
+	}
+}
+
 @media only screen and (min-width: 1000px) {
-	.grid {
+	.video-list {
 		grid-template-columns: repeat(calc(2 - var(--chat-open)), minmax(0, 1fr));
 	}
 }
 
 @media only screen and (min-width: 1300px) {
-	.grid {
+	.video-list {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 }
