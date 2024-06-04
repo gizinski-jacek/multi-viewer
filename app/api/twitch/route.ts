@@ -1,4 +1,4 @@
-import { TwitchAuth, TwitchVideo, VideoData } from '@/app/libs/types';
+import { TwitchAuth, TwitchStream, VideoData } from '@/app/libs/types';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { NextResponse, type NextRequest } from 'next/server';
 import querystring from 'querystring';
@@ -34,7 +34,7 @@ export async function GET(
 		const query = querystring.stringify({
 			login: id,
 		});
-		const res: AxiosResponse<TwitchVideo> = await axios.get(
+		const res: AxiosResponse<TwitchStream> = await axios.get(
 			'https://api.twitch.tv/helix/users?' + query,
 			{
 				headers: {
@@ -50,6 +50,7 @@ export async function GET(
 			channelId: res.data.data[0].login,
 			name: res.data.data[0].display_name,
 			iFrameSrcId: res.data.data[0].login,
+			livestreamChat: true,
 		};
 		return NextResponse.json(data, { status: 200 });
 	} catch (error: any) {
