@@ -40,6 +40,7 @@
 	transform-origin: center;
 	transition: all 0.5s ease;
 	rotate: x 180deg;
+	transform: translateX(-50%);
 
 	&:before,
 	&:after {
@@ -60,7 +61,7 @@
 .show-nav-btn {
 	@extend .hide-nav-btn;
 	rotate: x 0deg;
-	transform: translateY(8px);
+	transform: translateX(-50%) translateY(8px);
 }
 
 @media only screen and (min-width: 768px) {
