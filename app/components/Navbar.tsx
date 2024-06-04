@@ -1,18 +1,20 @@
+import { Sources } from '../libs/types';
 import styles from './Navbar.module.scss';
 import { useEffect, useState } from 'react';
 
 interface Props {
-	addVideo: (source: string, userInput: string) => void;
-	toggleChat: (source: string, userInput: string) => void;
+	addVideo: (source: Sources, userInput: string) => void;
+	toggleChat: (source: Sources, userInput: string) => void;
+	activeChat: boolean;
 }
 
-export default function Navbar({ addVideo, toggleChat }: Props) {
-	const [source, setSource] = useState<string>('youtube');
+export default function Navbar({ addVideo, toggleChat, activeChat }: Props) {
+	const [source, setSource] = useState<Sources>('youtube');
 	const [userInput, setUserInput] = useState<string>('-FFyqea427M');
 	const [showNavbar, setShowNavbar] = useState<boolean>(true);
 
 	function handleSourceChange(e: React.ChangeEvent<HTMLSelectElement>) {
-		const { value } = e.target;
+		const { value } = e.target as { value: Sources };
 		setSource(value);
 	}
 
@@ -36,7 +38,7 @@ export default function Navbar({ addVideo, toggleChat }: Props) {
 		<nav className={showNavbar ? styles['navbar'] : styles['navbar-hidden']}>
 			<div>MultiViewer</div>
 			<form
-				className='d-flex flex-row gap-3'
+				className='d-flex flex-row gap-2'
 				onSubmit={(e) => e.preventDefault()}
 			>
 				<fieldset>
@@ -53,6 +55,7 @@ export default function Navbar({ addVideo, toggleChat }: Props) {
 						<option value=''>Select</option>
 						<option value='youtube'>Youtube</option>
 						<option value='twitch'>Twitch</option>
+						<option value='twitch-vod'>Twitch VOD</option>
 					</select>
 				</fieldset>
 				<fieldset>
@@ -80,6 +83,7 @@ export default function Navbar({ addVideo, toggleChat }: Props) {
 				className='btn btn-primary py-0 px-2 fw-bold text-uppercase'
 				type='button'
 				onClick={() => toggleChat(source, userInput)}
+				disabled={!activeChat}
 			>
 				Chat
 			</button>
