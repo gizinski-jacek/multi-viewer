@@ -89,6 +89,10 @@ export default function App() {
 		[openChat]
 	);
 
+	function dismissError() {
+		setError(null);
+	}
+
 	return (
 		<main className={styles.app}>
 			<Navbar
@@ -96,6 +100,11 @@ export default function App() {
 				toggleChat={handleChatToggle}
 				activeChat={!!videoData.find((v) => v.livestreamChat)}
 			/>
+			{error && !!videoData.length && (
+				<div className={styles['error-absolute']} onClick={dismissError}>
+					{error}
+				</div>
+			)}
 			<div className='flex-fill d-flex flex-column flex-md-row p-3 gap-2'>
 				<div className={styles['video-list']}>
 					{videoData.map((vid) => (
@@ -112,6 +121,11 @@ export default function App() {
 						</div>
 					))}
 					{fetching && <Loading styleClass='m-auto w-100' />}
+					{error && !videoData.length && (
+						<div className={styles.error} onClick={dismissError}>
+							{error}
+						</div>
+					)}
 				</div>
 				{openChat && (
 					<div className={styles.chat}>
