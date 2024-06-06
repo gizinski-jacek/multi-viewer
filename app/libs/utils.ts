@@ -1,25 +1,27 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { Sources, VideoData } from './types';
+import { Hosts, VideoData } from './types';
 
-export const sourceExtractURIList: { [key: string]: string } = {
+export const hostExtractURIList: { [key: string]: string } = {
 	youtube: 'https://www.youtube.com/watch?v=',
 	twitch: 'https://www.twitch.tv/',
 	'twitch-vod': 'https://www.twitch.tv/videos/',
+	dailymotion: 'https://www.dailymotion.com/video/',
+	vimeo: 'https://vimeo.com/',
 };
 
 export async function getVideoData(
-	source: Sources,
+	host: Hosts,
 	id: string
 ): Promise<VideoData> {
 	try {
-		if (!source) {
-			throw new Error('Select source');
+		if (!host) {
+			throw new Error('Select video host');
 		}
 		if (!id) {
-			throw new Error('Provide link/Id');
+			throw new Error('Provide video link or ID');
 		}
 		const res: AxiosResponse<VideoData> = await axios.get(
-			`/api/${source}?id=${id}`,
+			`/api/${host}?id=${id}`,
 			{ timeout: 10000 }
 		);
 		return res.data;
@@ -34,7 +36,7 @@ export async function getVideoData(
 	}
 }
 
-export function createIFrameVideoSource(source: Sources, id: string): string {
+export function createIFrameVideoSource(host: Hosts, id: string): string {
 	const embed_domain =
 		process.env.NEXT_PUBLIC_NODE_ENV === 'production'
 			? process.env.NEXT_PUBLIC_EMBED_DOMAIN
@@ -42,19 +44,23 @@ export function createIFrameVideoSource(source: Sources, id: string): string {
 	if (!embed_domain) {
 		throw new Error('Environment setup error');
 	}
-	switch (source) {
+	switch (host) {
 		case 'youtube':
-			return `https://www.youtube-nocookie.com/embed/${id}?si=KYaMHED2Xcwqpct0`;
+			return `https://www.youtube-nocookie.com/embed/${id}`;
 		case 'twitch':
 			return `https://player.twitch.tv/?channel=${id}&parent=${embed_domain}`;
 		case 'twitch-vod':
 			return `https://player.twitch.tv/?video=${id}&parent=${embed_domain}`;
+		case 'dailymotion':
+			return `https://www.dailymotion.com/embed/video/${id}`;
+		case 'vimeo':
+			return `https://player.vimeo.com/video/${id}`;
 		default:
-			throw new Error();
+			throw new Error('Unsupported host or incorrect ID');
 	}
 }
 
-export function createIFrameChatSource(source: Sources, id: string): string {
+export function createIFrameChatSource(host: Hosts, id: string): string {
 	const embed_domain =
 		process.env.NEXT_PUBLIC_NODE_ENV === 'production'
 			? process.env.NEXT_PUBLIC_EMBED_DOMAIN
@@ -62,7 +68,7 @@ export function createIFrameChatSource(source: Sources, id: string): string {
 	if (!embed_domain) {
 		throw new Error('Environment setup error');
 	}
-	switch (source) {
+	switch (host) {
 		case 'youtube':
 			return `https://www.youtube.com/live_chat?v=${id}&embed_domain=${embed_domain}`;
 		case 'twitch':
@@ -70,6 +76,6 @@ export function createIFrameChatSource(source: Sources, id: string): string {
 		case 'twitch-vod':
 			return `https://www.twitch.tv/embed/${id}/chat?parent=${embed_domain}`;
 		default:
-			throw new Error();
+			throw new Error('Unsupported host or incorrect ID');
 	}
 }
