@@ -6,11 +6,11 @@ import {
 	createIFrameChatSource,
 	createIFrameVideoSource,
 	getVideoData,
-	sourceExtractURIList,
+	hostExtractURIList,
 } from './libs/utils';
 import { IFrameWrapper } from './components/IFrameWrapper';
 import Navbar from './components/Navbar';
-import { Sources, VideoData } from './libs/types';
+import { Hosts, VideoData } from './libs/types';
 import Loading from './components/Loading';
 
 export default function App() {
@@ -20,24 +20,25 @@ export default function App() {
 	const [openChat, setOpenChat] = useState<boolean>(false);
 	const [activeChat, setActiveChat] = useState<VideoData | null>(null);
 
-	async function handleAddVideo(source: Sources, userInput: string) {
+	async function handleAddVideo(host: Hosts, userInput: string) {
 		try {
 			if (fetching) return;
 			setFetching(true);
-			if (!source) {
-				setError('Select source');
+			dismissError();
+			if (!host) {
+				setError('Select video host');
 				return;
 			}
 			if (!userInput) {
-				setError('Provide link/Id');
+				setError('Provide video link or ID');
 				return;
 			}
-			const id = userInput.replace(sourceExtractURIList[source], '');
-			if (videoData.find((vid) => vid.id === id && vid.source === source)) {
+			const id = userInput.replace(hostExtractURIList[host], '');
+			if (videoData.find((vid) => vid.id === id && vid.host === host)) {
 				setFetching(false);
 				return;
 			}
-			const data = await getVideoData(source, id);
+			const data = await getVideoData(host, id);
 			setVideoData((prevState) => [...prevState, data]);
 			setFetching(false);
 		} catch (error: any) {
@@ -52,11 +53,9 @@ export default function App() {
 			return;
 		}
 		setVideoData((prevState) =>
-			prevState.filter(
-				(vid) => vid.id !== video.id && vid.source !== video.source
-			)
+			prevState.filter((vid) => vid.id !== video.id && vid.host !== video.host)
 		);
-		if (activeChat?.id === video.id && activeChat.source === video.source) {
+		if (activeChat?.id === video.id && activeChat.host === video.host) {
 			setActiveChat(null);
 			setOpenChat(false);
 		}
@@ -116,7 +115,7 @@ export default function App() {
 								Close
 							</div>
 							<IFrameWrapper
-								src={createIFrameVideoSource(vid.source, vid.iFrameSrcId)}
+								src={createIFrameVideoSource(vid.host, vid.iFrameSrcId)}
 							/>
 						</div>
 					))}
@@ -138,7 +137,7 @@ export default function App() {
 												<div
 													className={`btn p-0 px-1 text-nowrap overflow-hidden ${
 														activeChat?.id === vid.id &&
-														activeChat?.source === vid.source
+														activeChat?.host === vid.host
 															? 'btn-primary'
 															: 'btn-secondary'
 													}`}
@@ -154,7 +153,7 @@ export default function App() {
 									{activeChat && (
 										<IFrameWrapper
 											src={createIFrameChatSource(
-												activeChat.source,
+												activeChat.host,
 												activeChat.id
 											)}
 										/>
