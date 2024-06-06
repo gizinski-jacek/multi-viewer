@@ -1,9 +1,14 @@
-export type Sources = 'youtube' | 'twitch' | 'twitch-vod';
+export type Hosts =
+	| 'youtube'
+	| 'twitch'
+	| 'twitch-vod'
+	| 'dailymotion'
+	| 'vimeo';
 
 export interface VideoData {
-	source: Sources;
+	host: Hosts;
 	id: string;
-	channelId: string;
+	channelId: string | null;
 	name: string;
 	iFrameSrcId: string;
 	livestreamChat: boolean;
@@ -99,4 +104,11 @@ export interface TwitchVOD {
 		}
 	];
 	pagination: {};
+}
+
+export interface DailymotionVideo {
+	id: string;
+	title: string;
+	channel: string;
+	owner: string;
 }
