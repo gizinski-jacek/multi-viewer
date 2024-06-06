@@ -20,7 +20,7 @@ export async function GET(
 		const id = searchParams.get('id');
 		if (!id)
 			return NextResponse.json(
-				{ error: 'Provide playlist link or Id' },
+				{ error: 'Provide video link or Id' },
 				{ status: 400 }
 			);
 		const authQuery = querystring.stringify({
@@ -45,7 +45,7 @@ export async function GET(
 			}
 		);
 		const data: VideoData = {
-			source: 'twitch-vod',
+			host: 'twitch-vod',
 			id: res.data.data[0].id,
 			channelId: res.data.data[0].user_login,
 			name: res.data.data[0].user_name,

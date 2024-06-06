@@ -18,7 +18,7 @@ export async function GET(
 		const id = searchParams.get('id');
 		if (!id)
 			return NextResponse.json(
-				{ error: 'Provide playlist link or Id' },
+				{ error: 'Provide video link or Id' },
 				{ status: 400 }
 			);
 		const query = querystring.stringify({
@@ -31,7 +31,7 @@ export async function GET(
 			{ timeout: 10000 }
 		);
 		const data: VideoData = {
-			source: 'youtube',
+			host: 'youtube',
 			id: res.data.items[0].id,
 			channelId: res.data.items[0].snippet.channelId,
 			name: res.data.items[0].snippet.channelTitle,
