@@ -1,7 +1,7 @@
 'use client';
 
 import styles from './page.module.scss';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
 	createIFrameChatSource,
 	createIFrameVideoSource,
@@ -19,6 +19,7 @@ export default function App() {
 	const [videoData, setVideoData] = useState<VideoData[]>([]);
 	const [openChat, setOpenChat] = useState<boolean>(false);
 	const [activeChat, setActiveChat] = useState<VideoData | null>(null);
+	const [gridColSize, setGridColSize] = useState<number>(1);
 
 	async function handleAddVideo(host: Hosts, userInput: string) {
 		try {
@@ -78,15 +79,47 @@ export default function App() {
 		setActiveChat(chat);
 	}
 
-	useEffect(
-		function () {
-			document.documentElement.style.setProperty(
-				'--chat-open',
-				openChat ? '1' : '0'
-			);
-		},
-		[openChat]
-	);
+	const watchResize = useCallback(() => {
+		if (window.innerWidth < 1000) {
+			setGridColSize(1);
+		}
+		if (window.innerWidth >= 1000 && window.innerWidth < 1300) {
+			if (videoData.length > 1) {
+				if (openChat) {
+					setGridColSize(1);
+				} else {
+					setGridColSize(2);
+				}
+			} else if (videoData.length === 1 && fetching) {
+				if (openChat) {
+					setGridColSize(1);
+				} else {
+					setGridColSize(2);
+				}
+			} else {
+				setGridColSize(1);
+			}
+		}
+		if (window.innerWidth >= 1300) {
+			if (videoData.length > 1 || (fetching && videoData.length === 1)) {
+				setGridColSize(2);
+			} else {
+				setGridColSize(1);
+			}
+		}
+	}, [videoData, openChat, fetching]);
+
+	useEffect(() => {
+		watchResize();
+	}, [videoData, openChat, watchResize]);
+
+	useEffect(() => {
+		if (typeof window === 'undefined') return;
+
+		window.addEventListener('resize', watchResize);
+
+		return () => window.removeEventListener('resize', watchResize);
+	}, [watchResize]);
 
 	function dismissError() {
 		setError(null);
@@ -105,7 +138,11 @@ export default function App() {
 				</div>
 			)}
 			<div className='flex-fill d-flex flex-column flex-md-row p-3 gap-2'>
-				<div className={styles['video-list']}>
+				<div
+					className={`${styles['video-list']} ${
+						styles[`grid-size-${gridColSize}`]
+					}`}
+				>
 					{videoData.map((vid) => (
 						<div key={vid.id} className={styles.video}>
 							<div
@@ -144,7 +181,7 @@ export default function App() {
 													key={vid.id}
 													onClick={() => handleChangeChat(vid)}
 												>
-													{vid.name}
+													{vid.channelName}
 												</div>
 											)
 									)}
