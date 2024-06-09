@@ -10,8 +10,15 @@
 .video-list {
 	flex: 1;
 	display: grid;
-	grid-template-columns: repeat(1, minmax(0, 1fr));
 	gap: 0.5rem;
+
+	&.grid-size-1 {
+		grid-template-columns: repeat(1, minmax(0, 1fr));
+	}
+
+	&.grid-size-2 {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
 }
 
 .video {
@@ -52,6 +59,7 @@
 
 		> div {
 			min-width: 60px;
+			max-width: 120px;
 		}
 	}
 }
@@ -94,17 +102,5 @@
 		.chat-list {
 			padding-bottom: 0.5rem;
 		}
-	}
-}
-
-@media only screen and (min-width: 1000px) {
-	.video-list {
-		grid-template-columns: repeat(calc(2 - var(--chat-open)), minmax(0, 1fr));
-	}
-}
-
-@media only screen and (min-width: 1300px) {
-	.video-list {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 }
