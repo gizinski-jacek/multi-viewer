@@ -9,8 +9,8 @@ interface Props {
 }
 
 export default function Navbar({ addVideo, toggleChat, activeChat }: Props) {
-	const [host, setHost] = useState<Hosts>('youtube');
-	const [userInput, setUserInput] = useState<string>('-FFyqea427M');
+	const [host, setHost] = useState<Hosts>('');
+	const [userInput, setUserInput] = useState<string>('');
 	const [showNavbar, setShowNavbar] = useState<boolean>(true);
 
 	function handleHostChange(e: React.ChangeEvent<HTMLSelectElement>) {
