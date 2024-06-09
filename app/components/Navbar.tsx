@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 interface Props {
 	addVideo: (host: Hosts, userInput: string) => void;
-	toggleChat: (host: Hosts, userInput: string) => void;
+	toggleChat: (host: string, userInput: string) => void;
 	activeChat: boolean;
 }
 
