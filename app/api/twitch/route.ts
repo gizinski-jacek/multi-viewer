@@ -32,10 +32,10 @@ export async function GET(
 			'https://id.twitch.tv/oauth2/token?' + authQuery
 		);
 		const query = querystring.stringify({
-			login: id,
+			user_login: id,
 		});
 		const res: AxiosResponse<TwitchStream> = await axios.get(
-			'https://api.twitch.tv/helix/users?' + query,
+			'https://api.twitch.tv/helix/streams?' + query,
 			{
 				headers: {
 					Authorization: 'Bearer ' + resAuth.data.access_token,
@@ -47,9 +47,10 @@ export async function GET(
 		const data: VideoData = {
 			host: 'twitch',
 			id: res.data.data[0].id,
-			channelId: res.data.data[0].login,
-			name: res.data.data[0].display_name,
-			iFrameSrcId: res.data.data[0].login,
+			title: res.data.data[0].title,
+			channelId: res.data.data[0].user_id,
+			channelName: res.data.data[0].user_name,
+			iFrameSrcId: res.data.data[0].user_login,
 			livestreamChat: true,
 		};
 		return NextResponse.json(data, { status: 200 });
