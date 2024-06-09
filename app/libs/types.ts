@@ -3,7 +3,8 @@ export type Hosts =
 	| 'twitch'
 	| 'twitch-vod'
 	| 'dailymotion'
-	| 'vimeo';
+	| 'vimeo'
+	| '';
 
 export interface VideoData {
 	host: Hosts;
