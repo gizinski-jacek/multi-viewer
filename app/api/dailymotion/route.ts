@@ -19,8 +19,9 @@ export async function GET(
 		const data: VideoData = {
 			host: 'dailymotion',
 			id: res.data.id,
+			title: res.data.title,
 			channelId: res.data.owner,
-			name: res.data.title,
+			channelName: res.data.channel,
 			iFrameSrcId: res.data.id,
 			livestreamChat: false,
 		};
