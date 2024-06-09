@@ -47,8 +47,9 @@ export async function GET(
 		const data: VideoData = {
 			host: 'twitch-vod',
 			id: res.data.data[0].id,
-			channelId: res.data.data[0].user_login,
-			name: res.data.data[0].user_name,
+			title: res.data.data[0].title,
+			channelId: res.data.data[0].stream_id,
+			channelName: res.data.data[0].user_name,
 			iFrameSrcId: res.data.data[0].id,
 			livestreamChat: true,
 		};

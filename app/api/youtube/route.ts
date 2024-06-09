@@ -33,8 +33,9 @@ export async function GET(
 		const data: VideoData = {
 			host: 'youtube',
 			id: res.data.items[0].id,
+			title: res.data.items[0].snippet.title,
 			channelId: res.data.items[0].snippet.channelId,
-			name: res.data.items[0].snippet.channelTitle,
+			channelName: res.data.items[0].snippet.channelTitle,
 			iFrameSrcId: res.data.items[0].id,
 			livestreamChat: res.data.items[0].snippet.liveBroadcastContent === 'live',
 		};
