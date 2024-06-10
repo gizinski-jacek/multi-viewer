@@ -23,6 +23,10 @@
 		font-size: 0.9rem;
 		max-width: 120px;
 	}
+
+	select {
+		text-transform: capitalize;
+	}
 }
 
 .navbar-hidden {
