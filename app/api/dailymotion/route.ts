@@ -13,15 +13,16 @@ export async function GET(
 				{ error: 'Provide video link or Id' },
 				{ status: 400 }
 			);
+		const fields = ['id', 'title', 'owner.id', 'owner.username'];
 		const res: AxiosResponse<DailymotionVideo> = await axios.get(
-			'https://api.dailymotion.com/video/' + id
+			'https://api.dailymotion.com/video/' + id + '?fields=' + fields.join(',')
 		);
 		const data: VideoData = {
 			host: 'dailymotion',
 			id: res.data.id,
 			title: res.data.title,
-			channelId: res.data.owner,
-			channelName: res.data.channel,
+			channelId: res.data['owner.id'],
+			channelName: res.data['owner.username'],
 			iFrameSrcId: res.data.id,
 			livestreamChat: false,
 		};
