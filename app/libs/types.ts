@@ -1,8 +1,10 @@
 export type Hosts =
 	| 'youtube'
+	| 'youtube-playlist'
 	| 'twitch'
 	| 'twitch-vod'
 	| 'dailymotion'
+	| 'dailymotion-playlist'
 	| 'vimeo'
 	| '';
 
@@ -111,8 +113,15 @@ export interface TwitchVOD {
 export interface DailymotionVideo {
 	id: string;
 	title: string;
-	channel: string;
-	owner: string;
+	'owner.id': string;
+	'owner.username': string;
+}
+
+export interface DailymotionPlaylist {
+	id: string;
+	name: string;
+	'owner.id': string;
+	'owner.username': string;
 }
 
 export interface VimeoVideo {
