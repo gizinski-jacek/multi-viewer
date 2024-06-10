@@ -5,8 +5,8 @@ import { useCallback, useEffect, useState } from 'react';
 import {
 	createIFrameChatSource,
 	createIFrameVideoSource,
+	extractVideoId,
 	getVideoData,
-	hostExtractURIList,
 } from './libs/utils';
 import { IFrameWrapper } from './components/IFrameWrapper';
 import Navbar from './components/Navbar';
@@ -34,7 +34,7 @@ export default function App() {
 				setError('Provide video link or ID');
 				return;
 			}
-			const id = userInput.replace(hostExtractURIList[host], '');
+			const id = extractVideoId(host, userInput);
 			if (videoData.find((vid) => vid.id === id && vid.host === host)) {
 				setFetching(false);
 				return;
@@ -54,7 +54,9 @@ export default function App() {
 			return;
 		}
 		setVideoData((prevState) =>
-			prevState.filter((vid) => vid.id !== video.id && vid.host !== video.host)
+			prevState.filter((v) =>
+				v.id === video.id ? (v.host === video.host ? false : true) : true
+			)
 		);
 		if (activeChat?.id === video.id && activeChat.host === video.host) {
 			setActiveChat(null);
