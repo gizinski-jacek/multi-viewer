@@ -54,9 +54,11 @@ export default function Navbar({ addVideo, toggleChat, activeChat }: Props) {
 					>
 						<option value=''>Select</option>
 						<option value='youtube'>Youtube</option>
+						<option value='youtube-playlist'>Youtube Playlist</option>
 						<option value='twitch'>Twitch</option>
 						<option value='twitch-vod'>Twitch VOD</option>
 						<option value='dailymotion'>Dailymotion</option>
+						<option value='dailymotion-playlist'>Dailymotion Playlist</option>
 						<option value='vimeo'>Vimeo</option>
 					</select>
 				</fieldset>
