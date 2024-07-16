@@ -12,7 +12,8 @@ export function extractVideoId(host: Hosts, string: string): string {
 		case 'youtube':
 			let idYT = str
 				.replace('https://youtu.be/', '')
-				.replace('https://www.youtube.com/watch?v=', '');
+				.replace('https://www.youtube.com/watch?v=', '')
+				.replace('https://www.youtube.com/live/', '');
 			if (idYT.indexOf('?si=') > 1) {
 				return idYT.slice(0, idYT.indexOf('?si='));
 			} else {
