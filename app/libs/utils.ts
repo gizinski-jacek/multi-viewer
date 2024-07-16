@@ -21,11 +21,11 @@ export function extractVideoId(host: Hosts, string: string): string {
 		case 'youtube-playlist':
 			let idYTP = str.slice(str.indexOf('?list=') + 6);
 			return idYTP.slice(0, idYTP.indexOf('?si='));
-		case 'twitch' ||
-			'twitch-vod' ||
-			'playlist' ||
-			'dailymotion-playlist' ||
-			'vimeo':
+		case 'twitch':
+		case 'twitch-vod':
+		case 'dailymotion':
+		case 'dailymotion-playlist':
+		case 'vimeo':
 			return str.slice(str.lastIndexOf('/') + 1);
 		default:
 			throw new Error('Unsupported host or incorrect ID');
