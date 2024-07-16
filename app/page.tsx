@@ -104,7 +104,7 @@ export default function App() {
 			}
 		}
 		if (window.innerWidth >= 1300) {
-			if (videoData.length > 1 || (fetching && videoData.length === 1)) {
+			if (videoData.length > 1) {
 				setGridColSize(2);
 			} else {
 				setGridColSize(1);
@@ -159,7 +159,21 @@ export default function App() {
 							/>
 						</div>
 					))}
-					{fetching && <Loading styleClass='m-auto w-100' />}
+					{fetching && (
+						<div
+							className='position-absolute top-0 start-0 end-0 bottom-0 bg-dark'
+							style={{ '--bs-bg-opacity': '0.75' }}
+						>
+							<Loading
+								style={{
+									position: 'absolute',
+									left: '50%',
+									top: '50%',
+									transform: 'translate(-50%, -50%)',
+								}}
+							/>
+						</div>
+					)}
 					{error && !videoData.length && (
 						<div className={styles.error} onClick={dismissError}>
 							{error}
