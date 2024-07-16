@@ -24,7 +24,7 @@ export default function App() {
 	async function handleAddVideo(host: Hosts, userInput: string) {
 		try {
 			if (fetching) return;
-			setFetching(true);
+
 			dismissError();
 			if (!host) {
 				setError('Select video host');
@@ -34,6 +34,7 @@ export default function App() {
 				setError('Provide video link or ID');
 				return;
 			}
+			setFetching(true);
 			const id = extractVideoId(host, userInput);
 			if (videoData.find((vid) => vid.id === id && vid.host === host)) {
 				setFetching(false);
