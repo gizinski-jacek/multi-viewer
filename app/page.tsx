@@ -1,7 +1,7 @@
 'use client';
 
 import styles from './page.module.scss';
-import { useCallback, useEffect, useState } from 'react';
+import { CSSProperties, useCallback, useEffect, useState } from 'react';
 import {
 	createIFrameChatSource,
 	createIFrameVideoSource,
@@ -162,7 +162,7 @@ export default function App() {
 					{fetching && (
 						<div
 							className='position-absolute top-0 start-0 end-0 bottom-0 bg-dark'
-							style={{ '--bs-bg-opacity': '0.75' }}
+							style={{ '--bs-bg-opacity': '0.75' } as CSSProperties}
 						>
 							<Loading
 								style={{
