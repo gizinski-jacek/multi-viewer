@@ -1,37 +1,35 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { Hosts, VideoData } from './types';
+import { NextResponse } from 'next/server';
 
 export function extractVideoId(host: Hosts, string: string): string {
+	if (!host) throw new Error('Select video host');
 	const str =
 		string[string.length - 1] === '/'
 			? string.slice(0, string.length - 1)
 			: string;
-	if (host === 'youtube') {
-		const id = str
-			.replace('https://youtu.be/', '')
-			.replace('https://www.youtube.com/watch?v=', '');
-		return id.slice(0, id.indexOf('?si='));
+	switch (host) {
+		case 'youtube':
+			let idYT = str
+				.replace('https://youtu.be/', '')
+				.replace('https://www.youtube.com/watch?v=', '');
+			if (idYT.indexOf('?si=') > 1) {
+				return idYT.slice(0, idYT.indexOf('?si='));
+			} else {
+				return idYT;
+			}
+		case 'youtube-playlist':
+			let idYTP = str.slice(str.indexOf('?list=') + 6);
+			return idYTP.slice(0, idYTP.indexOf('?si='));
+		case 'twitch' ||
+			'twitch-vod' ||
+			'playlist' ||
+			'dailymotion-playlist' ||
+			'vimeo':
+			return str.slice(str.lastIndexOf('/') + 1);
+		default:
+			throw new Error('Unsupported host or incorrect ID');
 	}
-	if (host === 'youtube-playlist') {
-		const id = str.slice(str.indexOf('?list=') + 6);
-		return id.slice(0, id.indexOf('?si='));
-	}
-	if (host === 'twitch') {
-		return str.slice(str.lastIndexOf('/') + 1);
-	}
-	if (host === 'twitch-vod') {
-		return str.slice(str.lastIndexOf('/') + 1);
-	}
-	if (host === 'dailymotion') {
-		return str.slice(str.lastIndexOf('/') + 1);
-	}
-	if (host === 'dailymotion-playlist') {
-		return str.slice(str.lastIndexOf('/') + 1);
-	}
-	if (host === 'vimeo') {
-		return str.slice(str.lastIndexOf('/') + 1);
-	}
-	throw new Error('Unsupported host or incorrect ID');
 }
 
 export async function getVideoData(
@@ -62,6 +60,7 @@ export async function getVideoData(
 }
 
 export function createIFrameVideoSource(host: Hosts, id: string): string {
+	if (!host) throw new Error('Select video host');
 	const embed_domain =
 		process.env.NEXT_PUBLIC_NODE_ENV === 'production'
 			? process.env.NEXT_PUBLIC_EMBED_DOMAIN
@@ -90,6 +89,7 @@ export function createIFrameVideoSource(host: Hosts, id: string): string {
 }
 
 export function createIFrameChatSource(host: Hosts, id: string): string {
+	if (!host) throw new Error('Select video host');
 	const embed_domain =
 		process.env.NEXT_PUBLIC_NODE_ENV === 'production'
 			? process.env.NEXT_PUBLIC_EMBED_DOMAIN
@@ -106,5 +106,26 @@ export function createIFrameChatSource(host: Hosts, id: string): string {
 			return `https://www.twitch.tv/embed/${id}/chat?parent=${embed_domain}`;
 		default:
 			throw new Error('Unsupported host or incorrect ID');
+	}
+}
+
+export function fetchErrorFormat(error: any): NextResponse<{
+	error: string;
+}> {
+	if (error instanceof Response) {
+		return NextResponse.json(
+			{ error: error.statusText || 'Unknown server error' },
+			{ status: error.status || 500 }
+		);
+	} else if (error instanceof AxiosError) {
+		return NextResponse.json(
+			{ error: error.message || 'Unknown server error' },
+			{ status: error.status || 500 }
+		);
+	} else {
+		return NextResponse.json(
+			{ error: 'Unknown server error' },
+			{ status: 500 }
+		);
 	}
 }
