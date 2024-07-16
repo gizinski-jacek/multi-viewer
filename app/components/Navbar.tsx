@@ -6,12 +6,19 @@ interface Props {
 	addVideo: (host: Hosts, userInput: string) => void;
 	toggleChat: (host: string, userInput: string) => void;
 	activeChat: boolean;
+	showNavbar: boolean;
+	toggleNavbar: () => void;
 }
 
-export default function Navbar({ addVideo, toggleChat, activeChat }: Props) {
+export default function Navbar({
+	addVideo,
+	toggleChat,
+	activeChat,
+	showNavbar,
+	toggleNavbar,
+}: Props) {
 	const [host, setHost] = useState<Hosts>('');
 	const [userInput, setUserInput] = useState<string>('');
-	const [showNavbar, setShowNavbar] = useState<boolean>(true);
 
 	function handleHostChange(e: React.ChangeEvent<HTMLSelectElement>) {
 		const { value } = e.target as { value: Hosts };
@@ -21,10 +28,6 @@ export default function Navbar({ addVideo, toggleChat, activeChat }: Props) {
 	function handleUserInputChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const { value } = e.target;
 		setUserInput(value);
-	}
-
-	function toggleNavbarVisibility(e: React.MouseEvent<HTMLElement>) {
-		setShowNavbar((prevState) => !prevState);
 	}
 
 	useEffect(() => {
@@ -93,7 +96,7 @@ export default function Navbar({ addVideo, toggleChat, activeChat }: Props) {
 			</button>
 			<div
 				className={showNavbar ? styles['hide-nav-btn'] : styles['show-nav-btn']}
-				onClick={toggleNavbarVisibility}
+				onClick={toggleNavbar}
 			></div>
 		</nav>
 	);
