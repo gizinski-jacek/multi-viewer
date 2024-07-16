@@ -20,6 +20,7 @@ export default function App() {
 	const [openChat, setOpenChat] = useState<boolean>(false);
 	const [activeChat, setActiveChat] = useState<VideoData | null>(null);
 	const [gridColSize, setGridColSize] = useState<number>(1);
+	const [showNavbar, setShowNavbar] = useState<boolean>(true);
 
 	async function handleAddVideo(host: Hosts, userInput: string) {
 		try {
@@ -36,10 +37,10 @@ export default function App() {
 			}
 			setFetching(true);
 			const id = extractVideoId(host, userInput);
-			if (videoData.find((vid) => vid.id === id && vid.host === host)) {
-				setFetching(false);
-				return;
-			}
+			// if (videoData.find((vid) => vid.id === id && vid.host === host)) {
+			// 	setFetching(false);
+			// 	return;
+			// }
 			const data = await getVideoData(host, id);
 			setVideoData((prevState) => [...prevState, data]);
 			setFetching(false);
@@ -128,23 +129,35 @@ export default function App() {
 		setError(null);
 	}
 
+	function toggleNavbarVisibility() {
+		setShowNavbar((prevState) => !prevState);
+	}
+
 	return (
 		<main className={styles.app}>
 			<Navbar
 				addVideo={handleAddVideo}
 				toggleChat={handleChatToggle}
 				activeChat={!!videoData.find((v) => v.livestreamChat)}
+				showNavbar={showNavbar}
+				toggleNavbar={toggleNavbarVisibility}
 			/>
 			{error && !!videoData.length && (
 				<div className={styles['error-absolute']} onClick={dismissError}>
 					{error}
 				</div>
 			)}
-			<div className='flex-fill d-flex flex-column flex-md-row p-3 gap-2'>
+			<div
+				className={`${
+					styles['container']
+				} flex-fill d-flex flex-column flex-md-row ${
+					showNavbar ? 'p-3 gap-2' : 'p-0 gap-1'
+				}`}
+			>
 				<div
 					className={`${styles['video-list']} ${
 						styles[`grid-size-${gridColSize}`]
-					}`}
+					} ${showNavbar ? 'gap-2' : 'gap-1'}`}
 				>
 					{videoData.map((vid) => (
 						<div key={vid.id} className={styles.video}>
