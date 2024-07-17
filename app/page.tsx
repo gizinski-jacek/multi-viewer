@@ -44,7 +44,7 @@ export default function App() {
 			const data = await getVideoData(host, id);
 			setVideoData((prevState) => [...prevState, data]);
 			setFetching(false);
-		} catch (error: any) {
+		} catch (error: unknown) {
 			setError(typeof error === 'string' ? error : 'Unknown error');
 			setFetching(false);
 		}

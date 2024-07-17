@@ -49,7 +49,7 @@ export async function getVideoData(
 			{ timeout: 10000 }
 		);
 		return res.data;
-	} catch (error: any) {
+	} catch (error: unknown) {
 		if (error instanceof Response) {
 			throw error.statusText || 'Unknown error';
 		} else if (error instanceof AxiosError) {
@@ -110,7 +110,7 @@ export function createIFrameChatSource(host: Hosts, id: string): string {
 	}
 }
 
-export function fetchErrorFormat(error: any): NextResponse<{
+export function fetchErrorFormat(error: unknown): NextResponse<{
 	error: string;
 }> {
 	if (error instanceof AxiosError) {
