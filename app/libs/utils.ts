@@ -113,14 +113,9 @@ export function createIFrameChatSource(host: Hosts, id: string): string {
 export function fetchErrorFormat(error: any): NextResponse<{
 	error: string;
 }> {
-	if (error instanceof Response) {
+	if (error instanceof AxiosError) {
 		return NextResponse.json(
-			{ error: error.statusText || 'Unknown server error' },
-			{ status: error.status || 500 }
-		);
-	} else if (error instanceof AxiosError) {
-		return NextResponse.json(
-			{ error: error.message || 'Unknown server error' },
+			{ error: error.response?.data.error || 'Unknown server error' },
 			{ status: error.status || 500 }
 		);
 	} else {
