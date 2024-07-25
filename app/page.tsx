@@ -12,6 +12,7 @@ import { IFrameWrapper } from './components/IFrameWrapper';
 import Navbar from './components/Navbar';
 import { Hosts, VideoData } from './libs/types';
 import Loading from './components/Loading';
+import { NextResponse } from 'next/server';
 
 export default function App() {
 	const [fetching, setFetching] = useState<boolean>(false);
@@ -35,17 +36,28 @@ export default function App() {
 				setError('Provide video link or ID');
 				return;
 			}
-			setFetching(true);
 			const id = extractVideoId(host, userInput);
-			// if (videoData.find((vid) => vid.id === id && vid.host === host)) {
-			// 	setFetching(false);
-			// 	return;
-			// }
+			if (videoData.find((vid) => vid.id === id && vid.host === host)) {
+				setError('Video already on the list');
+				return;
+			}
+			setFetching(true);
 			const data = await getVideoData(host, id);
 			setVideoData((prevState) => [...prevState, data]);
 			setFetching(false);
 		} catch (error: unknown) {
-			setError(typeof error === 'string' ? error : 'Unknown error');
+			if (error instanceof NextResponse) {
+				setError(
+					error.status !== 500
+						? error.statusText ||
+								'Unknown fetching error. Make sure you selected correct source.'
+						: 'Unknown fetching error. Make sure you selected correct source.'
+				);
+			} else {
+				setError(
+					'Unknown fetching error. Make sure you selected correct source.'
+				);
+			}
 			setFetching(false);
 		}
 	}
@@ -94,12 +106,6 @@ export default function App() {
 				} else {
 					setGridColSize(2);
 				}
-			} else if (videoData.length === 1 && fetching) {
-				if (openChat) {
-					setGridColSize(1);
-				} else {
-					setGridColSize(2);
-				}
 			} else {
 				setGridColSize(1);
 			}
@@ -111,7 +117,7 @@ export default function App() {
 				setGridColSize(1);
 			}
 		}
-	}, [videoData, openChat, fetching]);
+	}, [videoData, openChat]);
 
 	useEffect(() => {
 		watchResize();
