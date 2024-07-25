@@ -1,5 +1,5 @@
 import { DailymotionVideo, VideoData } from '@/app/libs/types';
-import { fetchErrorFormat } from '@/app/libs/utils';
+import { formatFetchError } from '@/app/libs/utils';
 import axios, { AxiosResponse } from 'axios';
 import { NextResponse, type NextRequest } from 'next/server';
 
@@ -29,6 +29,6 @@ export async function GET(
 		};
 		return NextResponse.json(data, { status: 200 });
 	} catch (error: unknown) {
-		return fetchErrorFormat(error);
+		return formatFetchError(error);
 	}
 }
