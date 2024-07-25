@@ -14,14 +14,21 @@ export function extractVideoId(host: Hosts, string: string): string {
 				.replace('https://youtu.be/', '')
 				.replace('https://www.youtube.com/watch?v=', '')
 				.replace('https://www.youtube.com/live/', '');
-			if (idYT.indexOf('?si=') > 1) {
-				return idYT.slice(0, idYT.indexOf('?si='));
-			} else {
-				return idYT;
+			if (idYT.indexOf('&list=') > 1) {
+				idYT = idYT.slice(0, idYT.indexOf('&list='));
 			}
+			if (idYT.indexOf('?si=') > 1) {
+				idYT = idYT.slice(0, idYT.indexOf('?si='));
+			}
+			return idYT;
 		case 'youtube-playlist':
-			let idYTP = str.slice(str.indexOf('?list=') + 6);
-			return idYTP.slice(0, idYTP.indexOf('?si='));
+			let idYTP = str
+				.replace('https://youtube.com/playlist?list=', '')
+				.replace('https://www.youtube.com/playlist?list=', '');
+			if (idYTP.includes('?si=')) {
+				idYTP = idYTP.slice(0, idYTP.indexOf('?si='));
+			}
+			return idYTP;
 		case 'twitch':
 		case 'twitch-vod':
 		case 'dailymotion':
@@ -50,13 +57,7 @@ export async function getVideoData(
 		);
 		return res.data;
 	} catch (error: unknown) {
-		if (error instanceof Response) {
-			throw error.statusText || 'Unknown error';
-		} else if (error instanceof AxiosError) {
-			throw error.message || 'Unknown error';
-		} else {
-			throw (error as Error).message || 'Unknown error';
-		}
+		throw formatFetchError(error);
 	}
 }
 
@@ -110,18 +111,21 @@ export function createIFrameChatSource(host: Hosts, id: string): string {
 	}
 }
 
-export function fetchErrorFormat(error: unknown): NextResponse<{
+export function formatFetchError(error: unknown): NextResponse<{
 	error: string;
 }> {
 	if (error instanceof AxiosError) {
 		return NextResponse.json(
 			{ error: error.response?.data.error || 'Unknown server error' },
-			{ status: error.status || 500 }
+			{
+				status: error.status || 500,
+				statusText: error.response?.data.error || 'Unknown server error',
+			}
 		);
 	} else {
 		return NextResponse.json(
 			{ error: 'Unknown server error' },
-			{ status: 500 }
+			{ status: 500, statusText: 'Unknown server error' }
 		);
 	}
 }
