@@ -1,5 +1,5 @@
 import { VideoData, YoutubeResponse } from '@/app/libs/types';
-import { fetchErrorFormat } from '@/app/libs/utils';
+import { formatFetchError } from '@/app/libs/utils';
 import axios, { AxiosResponse } from 'axios';
 import { NextResponse, type NextRequest } from 'next/server';
 import querystring from 'querystring';
@@ -31,8 +31,6 @@ export async function GET(
 			'https://youtube.googleapis.com/youtube/v3/playlists?' + query,
 			{ timeout: 10000 }
 		);
-		console.log(res.data);
-		console.log(res.data.items[0].snippet);
 		const data: VideoData = {
 			host: 'youtube-playlist',
 			id: res.data.items[0].id,
@@ -44,6 +42,7 @@ export async function GET(
 		};
 		return NextResponse.json(data, { status: 200 });
 	} catch (error: unknown) {
-		return fetchErrorFormat(error);
+		// console.log(error.response.data);
+		return formatFetchError(error);
 	}
 }
