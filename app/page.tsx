@@ -26,7 +26,6 @@ export default function App() {
 	async function handleAddVideo(host: Hosts, userInput: string) {
 		try {
 			if (fetching) return;
-
 			dismissError();
 			if (!host) {
 				setError('Select video host');
