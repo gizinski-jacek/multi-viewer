@@ -1,6 +1,6 @@
 .app {
 	min-height: 100vh;
-	min-width: 600px;
+	min-width: 400px;
 	display: flex;
 	flex-direction: column;
 	padding-top: var(--navbar-height);
@@ -26,7 +26,7 @@
 }
 
 .video {
-	min-width: 480px;
+	min-width: calc(400px - 2rem);
 	min-height: 270px;
 	width: 100%;
 	position: relative;
