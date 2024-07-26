@@ -39,13 +39,16 @@ export default function Navbar({
 
 	return (
 		<nav className={showNavbar ? styles['navbar'] : styles['navbar-hidden']}>
-			<div>MultiViewer</div>
+			<div className={'d-none d-md-inline-block'}>MultiViewer</div>
 			<form
 				className='d-flex flex-row gap-2'
 				onSubmit={(e) => e.preventDefault()}
 			>
 				<fieldset>
-					<label className='text-capitalize' htmlFor='host'>
+					<label
+						className={'d-none d-md-inline-block text-capitalize'}
+						htmlFor='host'
+					>
 						Host
 					</label>
 					<select
@@ -66,7 +69,10 @@ export default function Navbar({
 					</select>
 				</fieldset>
 				<fieldset>
-					<label className='text-capitalize' htmlFor='userInput'>
+					<label
+						className={'d-none d-md-inline-block text-capitalize'}
+						htmlFor='userInput'
+					>
 						Link/Id
 					</label>
 					<input
