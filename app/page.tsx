@@ -139,7 +139,7 @@ export default function App() {
 	}
 
 	return (
-		<main className={styles.app}>
+		<div className={styles.app}>
 			<Navbar
 				addVideo={handleAddVideo}
 				toggleChat={handleChatToggle}
@@ -152,11 +152,11 @@ export default function App() {
 					{error}
 				</div>
 			)}
-			<div
+			<main
 				className={`${
-					styles['container']
+					styles['main']
 				} flex-fill d-flex flex-column flex-md-row ${
-					showNavbar ? 'p-3 gap-2' : 'p-0 gap-1'
+					showNavbar ? `p-3 gap-2 ${styles['navbar-on']}` : 'p-0 gap-1'
 				}`}
 			>
 				<div
@@ -237,7 +237,7 @@ export default function App() {
 						)}
 					</div>
 				)}
-			</div>
-		</main>
+			</main>
+		</div>
 	);
 }

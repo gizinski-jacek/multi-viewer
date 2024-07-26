@@ -30,13 +30,6 @@ export default function Navbar({
 		setUserInput(value);
 	}
 
-	useEffect(() => {
-		document.documentElement.style.setProperty(
-			'--navbar-height',
-			showNavbar ? '48px' : '0'
-		);
-	}, [showNavbar]);
-
 	return (
 		<nav className={showNavbar ? styles['navbar'] : styles['navbar-hidden']}>
 			<div className='d-none d-sm-inline-block my-auto'>MultiViewer</div>

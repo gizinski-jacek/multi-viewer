@@ -3,18 +3,21 @@
 	min-width: 400px;
 	display: flex;
 	flex-direction: column;
-	padding-top: var(--navbar-height);
 	transition: all 0.5s ease;
 }
 
-.container {
-	transition: all 0.25s ease;
+.main {
+	transition: all 0.5s ease;
+
+	&.navbar-on {
+		padding-top: calc(48px + 1rem) !important;
+	}
 }
 
 .video-list {
 	flex: 1;
 	display: grid;
-	transition: all 0.25s ease;
+	transition: all 0.5s ease;
 
 	&.grid-size-1 {
 		grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -99,7 +102,7 @@
 @media only screen and (min-width: 768px) {
 	.chat {
 		width: 280px;
-		height: calc(100vh - 2rem - var(--navbar-height));
+		height: 100%;
 		gap: 0;
 
 		.chat-list {
