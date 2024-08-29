@@ -1,6 +1,7 @@
-import { Hosts } from '../libs/types';
 import styles from './Navbar.module.scss';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import Link from 'next/link';
+import { Hosts } from '../libs/types';
 
 interface Props {
 	addVideo: (host: Hosts, userInput: string) => void;
@@ -8,6 +9,8 @@ interface Props {
 	activeChat: boolean;
 	showNavbar: boolean;
 	toggleNavbar: () => void;
+	togglePlaylist: () => void;
+	disablePlaylist: boolean;
 }
 
 export default function Navbar({
@@ -16,6 +19,8 @@ export default function Navbar({
 	activeChat,
 	showNavbar,
 	toggleNavbar,
+	togglePlaylist,
+	disablePlaylist,
 }: Props) {
 	const [host, setHost] = useState<Hosts>('');
 	const [userInput, setUserInput] = useState<string>('');
@@ -32,7 +37,9 @@ export default function Navbar({
 
 	return (
 		<nav className={showNavbar ? styles['navbar'] : styles['navbar-hidden']}>
-			<div className='d-none d-sm-inline-block my-auto'>MultiViewer</div>
+			<Link href={'/home'} className='d-none d-sm-inline-block my-auto'>
+				MultiViewer
+			</Link>
 			<form
 				className='d-flex flex-row gap-2'
 				onSubmit={(e) => e.preventDefault()}
@@ -85,14 +92,25 @@ export default function Navbar({
 					Go
 				</button>
 			</form>
-			<button
-				className='btn btn-primary py-0 px-2 fw-bold text-uppercase'
-				type='button'
-				onClick={() => toggleChat(host, userInput)}
-				disabled={!activeChat}
-			>
-				Chat
-			</button>
+			<div className='d-flex gap-2'>
+				{/* !!!! Add layout toggle button */}
+				<button
+					className='btn btn-primary py-0 px-2 fw-bold text-uppercase'
+					type='button'
+					onClick={() => togglePlaylist()}
+					disabled={disablePlaylist}
+				>
+					List
+				</button>
+				<button
+					className='btn btn-primary py-0 px-2 fw-bold text-uppercase'
+					type='button'
+					onClick={() => toggleChat(host, userInput)}
+					disabled={!activeChat}
+				>
+					Chat
+				</button>
+			</div>
 			<div
 				className={showNavbar ? styles['hide-nav-btn'] : styles['show-nav-btn']}
 				onClick={toggleNavbar}
