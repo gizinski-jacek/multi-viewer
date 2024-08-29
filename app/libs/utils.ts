@@ -129,3 +129,32 @@ export function formatFetchError(error: unknown): NextResponse<{
 		);
 	}
 }
+
+export function createURLParams(data: VideoData[]): string {
+	return (
+		'?list=' +
+		encodeURIComponent(data.map((v) => v.host + '+' + v.id).join('--'))
+	);
+}
+
+export async function getDataFromParams(string: string): Promise<VideoData[]> {
+	const array = decodeURIComponent(string).split('--');
+	const results = await Promise.allSettled(
+		array.map(
+			(param) =>
+				new Promise(async (resolve, reject) => {
+					try {
+						const str = param.split('+');
+						const data = await getVideoData(str[0] as Hosts, str[1]);
+						resolve(data);
+					} catch (error: any) {
+						reject(formatFetchError(error));
+					}
+				})
+		)
+	);
+	const data = results.map((res) =>
+		res.status === 'fulfilled' ? (res.value as VideoData) : null
+	);
+	return data.filter((r) => r !== null);
+}
