@@ -1,27 +1,41 @@
 'use client';
 
-import styles from './page.module.scss';
+import styles from './styles.module.scss';
 import { CSSProperties, useCallback, useEffect, useState } from 'react';
 import {
-	createIFrameChatSource,
 	createIFrameVideoSource,
+	createURLParams,
 	extractVideoId,
+	getDataFromParams,
 	getVideoData,
-} from './libs/utils';
-import { IFrameWrapper } from './components/IFrameWrapper';
-import Navbar from './components/Navbar';
-import { Hosts, VideoData } from './libs/types';
-import Loading from './components/Loading';
+} from '../libs/utils';
+import { IFrameWrapper } from '../components/IFrameWrapper';
+import Navbar from '../components/Navbar';
+import { Hosts, VideoData } from '../libs/types';
+import Loading from '../components/Loading';
 import { NextResponse } from 'next/server';
+import { useSearchParams } from 'next/navigation';
+import Chat from '../components/Chat';
+import Playlist from '../components/Playlist';
 
 export default function App() {
+	const videoList = useSearchParams().get('list');
 	const [fetching, setFetching] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 	const [videoData, setVideoData] = useState<VideoData[]>([]);
-	const [openChat, setOpenChat] = useState<boolean>(false);
+	const [showChat, setShowChat] = useState<boolean>(false);
 	const [activeChat, setActiveChat] = useState<VideoData | null>(null);
 	const [gridColSize, setGridColSize] = useState<number>(1);
 	const [showNavbar, setShowNavbar] = useState<boolean>(true);
+	const [showPlaylist, setShowPlaylist] = useState<boolean>(false);
+
+	useEffect(() => {
+		(async () => {
+			if (!videoList) return;
+			const videoData = await getDataFromParams(videoList);
+			setVideoData(videoData);
+		})();
+	}, [videoList]);
 
 	async function handleAddVideo(host: Hosts, userInput: string) {
 		try {
@@ -42,7 +56,10 @@ export default function App() {
 			}
 			setFetching(true);
 			const data = await getVideoData(host, id);
-			setVideoData((prevState) => [...prevState, data]);
+			const newVideoDataState = [...videoData, data];
+			setVideoData(newVideoDataState);
+			const params = createURLParams(newVideoDataState);
+			window.history.pushState(null, '', params);
 			setFetching(false);
 		} catch (error: unknown) {
 			if (error instanceof NextResponse) {
@@ -66,32 +83,37 @@ export default function App() {
 			setError('Error removing video');
 			return;
 		}
-		setVideoData((prevState) =>
-			prevState.filter((v) =>
-				v.id === video.id ? (v.host === video.host ? false : true) : true
-			)
+		const newVideoDataState = videoData.filter((v) =>
+			v.id === video.id ? (v.host === video.host ? false : true) : true
 		);
+		setVideoData(newVideoDataState);
+		const newParams = createURLParams(newVideoDataState);
+		window.history.pushState(null, '', newParams);
 		if (activeChat?.id === video.id && activeChat.host === video.host) {
 			setActiveChat(null);
-			setOpenChat(false);
+			setShowChat(false);
 		}
 	}
 
 	function handleChatToggle() {
-		if (!openChat && !activeChat) {
-			const chat = videoData.find((v) => v.livestreamChat);
-			if (!chat) return;
-			setActiveChat(chat);
+		if (showPlaylist) {
+			setShowPlaylist(false);
+		} else {
+			if (!showChat && !activeChat) {
+				const chat = videoData.find((v) => v.livestreamChat);
+				if (!chat) return;
+				setActiveChat(chat);
+			}
+			setShowChat((prevState) => !prevState);
 		}
-		setOpenChat((prevState) => !prevState);
 	}
 
-	function handleChangeChat(chat: VideoData) {
-		if (!chat) {
+	function handleChangeChat(data: VideoData) {
+		if (!data) {
 			setError('Provide Id');
 			return;
 		}
-		setActiveChat(chat);
+		setActiveChat(data);
 	}
 
 	const watchResize = useCallback(() => {
@@ -100,7 +122,7 @@ export default function App() {
 		}
 		if (window.innerWidth >= 1000 && window.innerWidth < 1300) {
 			if (videoData.length > 1) {
-				if (openChat) {
+				if (showChat) {
 					setGridColSize(1);
 				} else {
 					setGridColSize(2);
@@ -116,11 +138,11 @@ export default function App() {
 				setGridColSize(1);
 			}
 		}
-	}, [videoData, openChat]);
+	}, [videoData, showChat]);
 
 	useEffect(() => {
 		watchResize();
-	}, [videoData, openChat, watchResize]);
+	}, [videoData, showChat, watchResize]);
 
 	useEffect(() => {
 		if (typeof window === 'undefined') return;
@@ -138,6 +160,10 @@ export default function App() {
 		setShowNavbar((prevState) => !prevState);
 	}
 
+	function handlePlaylistToggle() {
+		setShowPlaylist((prevState) => !prevState);
+	}
+
 	return (
 		<div className={styles.app}>
 			<Navbar
@@ -146,6 +172,8 @@ export default function App() {
 				activeChat={!!videoData.find((v) => v.livestreamChat)}
 				showNavbar={showNavbar}
 				toggleNavbar={toggleNavbarVisibility}
+				togglePlaylist={handlePlaylistToggle}
+				disablePlaylist={!videoData.length}
 			/>
 			{error && !!videoData.length && (
 				<div className={styles['error-absolute']} onClick={dismissError}>
@@ -198,45 +226,18 @@ export default function App() {
 						</div>
 					)}
 				</div>
-				{openChat && (
-					<div className={styles.chat}>
-						{videoData.length ? (
-							<>
-								<div className={styles['chat-list']}>
-									{videoData.map(
-										(vid) =>
-											vid.livestreamChat && (
-												<div
-													className={`btn p-0 px-1 text-nowrap overflow-hidden ${
-														activeChat?.id === vid.id &&
-														activeChat?.host === vid.host
-															? 'btn-primary'
-															: 'btn-secondary'
-													}`}
-													key={vid.id}
-													onClick={() => handleChangeChat(vid)}
-												>
-													{vid.channelName}
-												</div>
-											)
-									)}
-								</div>
-								<div className='flex-fill'>
-									{activeChat && (
-										<IFrameWrapper
-											src={createIFrameChatSource(
-												activeChat.host,
-												activeChat.id
-											)}
-										/>
-									)}
-								</div>
-							</>
-						) : (
-							<div className='m-auto'>Add a video to see the chat</div>
-						)}
-					</div>
-				)}
+				<div className={styles.sidebar}>
+					{showChat && (
+						<Chat
+							videoData={videoData}
+							activeChat={activeChat}
+							changeChat={handleChangeChat}
+						/>
+					)}
+					{showPlaylist && (
+						<Playlist navbarVisible={showNavbar} playlist={videoData} />
+					)}
+				</div>
 			</main>
 		</div>
 	);
