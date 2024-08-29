@@ -50,27 +50,6 @@
 	}
 }
 
-.chat {
-	display: flex;
-	flex-direction: column;
-	width: 100%;
-	height: 400px;
-	gap: 0.25rem;
-
-	.chat-list {
-		display: flex;
-		flex-direction: row;
-		gap: 0.25rem;
-		overflow-x: scroll;
-		scrollbar-width: thin;
-
-		> div {
-			min-width: 60px;
-			max-width: 120px;
-		}
-	}
-}
-
 .error {
 	width: fit-content;
 	height: fit-content;
