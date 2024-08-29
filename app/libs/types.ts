@@ -16,6 +16,7 @@ export interface VideoData {
 	channelName: string;
 	iFrameSrcId: string;
 	livestreamChat: boolean;
+	thumbnailUrl: string | null;
 }
 
 export interface YoutubeResponse {
