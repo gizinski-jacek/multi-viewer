@@ -7,6 +7,7 @@
 }
 
 .main {
+	overflow: hidden;
 	transition: all 0.5s ease;
 
 	&.navbar-on {
@@ -76,6 +77,14 @@
 	left: 0;
 	right: 0;
 	z-index: 200;
+}
+
+.sidebar {
+	position: relative;
+	display: grid;
+	grid-template-columns: 1;
+	grid-template-rows: 1;
+	max-width: 300px;
 }
 
 @media only screen and (min-width: 768px) {
