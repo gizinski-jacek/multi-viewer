@@ -26,6 +26,7 @@ export async function GET(
 			channelName: res.data['owner.username'],
 			iFrameSrcId: res.data.id,
 			livestreamChat: false,
+			thumbnailUrl: null,
 		};
 		return NextResponse.json(data, { status: 200 });
 	} catch (error: unknown) {

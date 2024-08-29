@@ -39,10 +39,10 @@ export async function GET(
 			channelName: res.data.items[0].snippet.channelTitle,
 			iFrameSrcId: res.data.items[0].id,
 			livestreamChat: res.data.items[0].snippet.liveBroadcastContent === 'live',
+			thumbnailUrl: res.data.items[0].snippet.thumbnails.default.url,
 		};
 		return NextResponse.json(data, { status: 200 });
 	} catch (error: unknown) {
-		// console.log(error.response.data);
 		return formatFetchError(error);
 	}
 }

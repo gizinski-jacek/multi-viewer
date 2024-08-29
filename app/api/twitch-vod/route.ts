@@ -53,6 +53,7 @@ export async function GET(
 			channelName: res.data.data[0].user_name,
 			iFrameSrcId: res.data.data[0].id,
 			livestreamChat: true,
+			thumbnailUrl: res.data.data[0].thumbnail_url,
 		};
 		return NextResponse.json(data, { status: 200 });
 	} catch (error: unknown) {
