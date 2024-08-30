@@ -19,7 +19,7 @@ import Chat from '../components/Chat';
 import Playlist from '../components/Playlist';
 
 export default function App() {
-	const videoList = useSearchParams().get('list');
+	const videoListParams = useSearchParams().get('list');
 	const [fetching, setFetching] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 	const [videoData, setVideoData] = useState<VideoData[]>([]);
@@ -34,11 +34,11 @@ export default function App() {
 
 	useEffect(() => {
 		(async () => {
-			if (!videoList) return;
-			const videoData = await getDataFromParams(videoList);
+			if (!videoListParams) return;
+			const videoData = await getDataFromParams(videoListParams);
 			setVideoData(videoData);
 		})();
-	}, [videoList]);
+	}, [videoListParams]);
 
 	async function handleAddVideo(host: Hosts, userInput: string) {
 		try {
@@ -223,22 +223,22 @@ export default function App() {
 									fill='none'
 									xmlns='http://www.w3.org/2000/svg'
 								>
-									<g stroke-width='0'></g>
-									<g stroke-linecap='round' stroke-linejoin='round'></g>
+									<g strokeWidth='0'></g>
+									<g strokeLinecap='round' strokeLinejoin='round'></g>
 									<g>
 										<path
 											d='M3 21.32L21 3.32001'
 											stroke='#000000'
-											stroke-width='2.5'
-											stroke-linecap='round'
-											stroke-linejoin='round'
+											strokeWidth='2.5'
+											strokeLinecap='round'
+											strokeLinejoin='round'
 										></path>
 										<path
 											d='M3 3.32001L21 21.32'
 											stroke='#000000'
-											stroke-width='2.5'
-											stroke-linecap='round'
-											stroke-linejoin='round'
+											strokeWidth='2.5'
+											strokeLinecap='round'
+											strokeLinejoin='round'
 										></path>
 									</g>
 								</svg>
