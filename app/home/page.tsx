@@ -214,10 +214,34 @@ export default function App() {
 					{videoData.map((video) => (
 						<div key={video.id} className={styles.video}>
 							<div
-								className={`${styles['remove-video']} btn btn-warning p-0 px-1`}
+								className={`${styles['remove-video']} btn btn-warning`}
 								onClick={() => handleRemoveVideo(video)}
 							>
-								Close
+								<svg
+									width='24px'
+									viewBox='-0.5 0 25 25'
+									fill='none'
+									xmlns='http://www.w3.org/2000/svg'
+								>
+									<g stroke-width='0'></g>
+									<g stroke-linecap='round' stroke-linejoin='round'></g>
+									<g>
+										<path
+											d='M3 21.32L21 3.32001'
+											stroke='#000000'
+											stroke-width='2.5'
+											stroke-linecap='round'
+											stroke-linejoin='round'
+										></path>
+										<path
+											d='M3 3.32001L21 21.32'
+											stroke='#000000'
+											stroke-width='2.5'
+											stroke-linecap='round'
+											stroke-linejoin='round'
+										></path>
+									</g>
+								</svg>
 							</div>
 							<IFrameWrapper
 								src={createIFrameVideoSource(video.host, video.iFrameSrcId)}
