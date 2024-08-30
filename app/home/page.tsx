@@ -25,9 +25,12 @@ export default function App() {
 	const [videoData, setVideoData] = useState<VideoData[]>([]);
 	const [showChat, setShowChat] = useState<boolean>(false);
 	const [activeChat, setActiveChat] = useState<VideoData | null>(null);
-	const [gridColSize, setGridColSize] = useState<number>(1);
+	const [gridColSize, setGridColSize] = useState<1 | 2>(1);
 	const [showNavbar, setShowNavbar] = useState<boolean>(true);
 	const [showPlaylist, setShowPlaylist] = useState<boolean>(false);
+	const [manualGridColSize, setManualGridColSize] = useState<'auto' | 1 | 2>(
+		'auto'
+	);
 
 	useEffect(() => {
 		(async () => {
@@ -98,6 +101,7 @@ export default function App() {
 	function handleChatToggle() {
 		if (showPlaylist) {
 			setShowPlaylist(false);
+			setShowChat(true);
 		} else {
 			if (!showChat && !activeChat) {
 				const chat = videoData.find((v) => v.livestreamChat);
@@ -117,6 +121,7 @@ export default function App() {
 	}
 
 	const watchResize = useCallback(() => {
+		if (manualGridColSize !== 'auto') return;
 		if (window.innerWidth < 1000) {
 			setGridColSize(1);
 		}
@@ -138,7 +143,7 @@ export default function App() {
 				setGridColSize(1);
 			}
 		}
-	}, [videoData, showChat]);
+	}, [videoData, showChat, manualGridColSize]);
 
 	useEffect(() => {
 		watchResize();
@@ -164,6 +169,16 @@ export default function App() {
 		setShowPlaylist((prevState) => !prevState);
 	}
 
+	function handleLayoutToggle() {
+		if (manualGridColSize === 'auto') {
+			setManualGridColSize(1);
+		} else if (manualGridColSize === 1) {
+			setManualGridColSize(2);
+		} else if (manualGridColSize === 2) {
+			setManualGridColSize('auto');
+		}
+	}
+
 	return (
 		<div className={styles.app}>
 			<Navbar
@@ -174,6 +189,8 @@ export default function App() {
 				toggleNavbar={toggleNavbarVisibility}
 				togglePlaylist={handlePlaylistToggle}
 				disablePlaylist={!videoData.length}
+				toggleLayout={handleLayoutToggle}
+				manualGridColSize={manualGridColSize}
 			/>
 			{error && !!videoData.length && (
 				<div className={styles['error-absolute']} onClick={dismissError}>
@@ -189,19 +206,21 @@ export default function App() {
 			>
 				<div
 					className={`${styles['video-list']} ${
-						styles[`grid-size-${gridColSize}`]
+						manualGridColSize === 'auto'
+							? styles[`grid-size-${gridColSize}`]
+							: styles[`grid-size-${manualGridColSize}`]
 					} ${showNavbar ? 'gap-2' : 'gap-1'}`}
 				>
-					{videoData.map((vid) => (
-						<div key={vid.id} className={styles.video}>
+					{videoData.map((video) => (
+						<div key={video.id} className={styles.video}>
 							<div
-								className={`${styles['close-video']} btn btn-warning p-0`}
-								onClick={() => handleRemoveVideo(vid)}
+								className={`${styles['remove-video']} btn btn-warning p-0 px-1`}
+								onClick={() => handleRemoveVideo(video)}
 							>
 								Close
 							</div>
 							<IFrameWrapper
-								src={createIFrameVideoSource(vid.host, vid.iFrameSrcId)}
+								src={createIFrameVideoSource(video.host, video.iFrameSrcId)}
 							/>
 						</div>
 					))}
@@ -226,18 +245,24 @@ export default function App() {
 						</div>
 					)}
 				</div>
-				<div className={styles.sidebar}>
-					{showChat && (
-						<Chat
-							videoData={videoData}
-							activeChat={activeChat}
-							changeChat={handleChangeChat}
-						/>
-					)}
-					{showPlaylist && (
-						<Playlist navbarVisible={showNavbar} playlist={videoData} />
-					)}
-				</div>
+				{(showChat || showPlaylist) && (
+					<div className={styles.sidebar}>
+						{showChat && (
+							<Chat
+								videoData={videoData}
+								activeChat={activeChat}
+								changeChat={handleChangeChat}
+							/>
+						)}
+						{showPlaylist && (
+							<Playlist
+								navbarVisible={showNavbar}
+								playlist={videoData}
+								removeVideo={handleRemoveVideo}
+							/>
+						)}
+					</div>
+				)}
 			</main>
 		</div>
 	);
