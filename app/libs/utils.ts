@@ -156,5 +156,6 @@ export async function getDataFromParams(string: string): Promise<VideoData[]> {
 	const data = results.map((res) =>
 		res.status === 'fulfilled' ? (res.value as VideoData) : null
 	);
-	return data.filter((r) => r !== null);
+	const filtered = data.filter((r) => r !== null);
+	return filtered;
 }
