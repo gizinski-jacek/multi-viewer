@@ -139,7 +139,7 @@ export function createURLParams(data: VideoData[]): string {
 
 export async function getDataFromParams(string: string): Promise<VideoData[]> {
 	const array = decodeURIComponent(string).split('--');
-	const results = await Promise.allSettled(
+	const results = (await Promise.allSettled(
 		array.map(
 			(param) =>
 				new Promise(async (resolve, reject) => {
@@ -152,10 +152,10 @@ export async function getDataFromParams(string: string): Promise<VideoData[]> {
 					}
 				})
 		)
-	);
-	const data = results.map((res) =>
-		res.status === 'fulfilled' ? (res.value as VideoData) : null
-	);
-	const filtered = data.filter((r) => r !== null);
-	return filtered;
+	)) as { status: 'fulfilled' | 'rejected'; value: VideoData }[];
+	const data = results
+		.filter((res) => res.status === 'fulfilled')
+		.map((res) => res.value);
+
+	return data;
 }
