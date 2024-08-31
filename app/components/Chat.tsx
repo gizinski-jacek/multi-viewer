@@ -1,7 +1,7 @@
 import styles from './Chat.module.scss';
 import { VideoData } from '../libs/types';
 import { createIFrameChatSource } from '../libs/utils';
-import { IFrameWrapper } from './IFrameWrapper';
+import { IFrameWrapper } from './wrappers/IFrameWrapper';
 
 interface Props {
 	videoData: VideoData[];
@@ -36,6 +36,7 @@ export default function Chat({ videoData, activeChat, changeChat }: Props) {
 						{activeChat && (
 							<IFrameWrapper
 								src={createIFrameChatSource(activeChat.host, activeChat.id)}
+								title={`${activeChat.host} chat`}
 							/>
 						)}
 					</div>
