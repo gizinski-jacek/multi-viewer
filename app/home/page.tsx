@@ -3,13 +3,11 @@
 import styles from './styles.module.scss';
 import { CSSProperties, useCallback, useEffect, useState } from 'react';
 import {
-	createIFrameVideoSource,
 	createURLParams,
 	extractVideoId,
 	getDataFromParams,
 	getVideoData,
 } from '../libs/utils';
-import { IFrameWrapper } from '../components/IFrameWrapper';
 import Navbar from '../components/Navbar';
 import { Hosts, VideoData } from '../libs/types';
 import Loading from '../components/Loading';
@@ -17,6 +15,7 @@ import { NextResponse } from 'next/server';
 import { useSearchParams } from 'next/navigation';
 import Chat from '../components/Chat';
 import Playlist from '../components/Playlist';
+import VideoWrapper from '../components/wrappers/VideoWrapper';
 
 export default function App() {
 	const videoListParams = useSearchParams().get('list');
@@ -212,41 +211,7 @@ export default function App() {
 					} ${showNavbar ? 'gap-2' : 'gap-1'}`}
 				>
 					{videoData.map((video) => (
-						<div key={video.id} className={styles.video}>
-							<div
-								className={`${styles['remove-video']} btn btn-warning`}
-								onClick={() => handleRemoveVideo(video)}
-							>
-								<svg
-									width='24px'
-									viewBox='-0.5 0 25 25'
-									fill='none'
-									xmlns='http://www.w3.org/2000/svg'
-								>
-									<g strokeWidth='0'></g>
-									<g strokeLinecap='round' strokeLinejoin='round'></g>
-									<g>
-										<path
-											d='M3 21.32L21 3.32001'
-											stroke='#000000'
-											strokeWidth='2.5'
-											strokeLinecap='round'
-											strokeLinejoin='round'
-										></path>
-										<path
-											d='M3 3.32001L21 21.32'
-											stroke='#000000'
-											strokeWidth='2.5'
-											strokeLinecap='round'
-											strokeLinejoin='round'
-										></path>
-									</g>
-								</svg>
-							</div>
-							<IFrameWrapper
-								src={createIFrameVideoSource(video.host, video.iFrameSrcId)}
-							/>
-						</div>
+						<VideoWrapper video={video} removeVideo={handleRemoveVideo} />
 					))}
 					{fetching && (
 						<div
