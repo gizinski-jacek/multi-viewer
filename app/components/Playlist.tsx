@@ -6,12 +6,14 @@ interface Props {
 	navbarVisible: boolean;
 	playlist: VideoData[];
 	removeVideo: (video: VideoData) => void;
+	reorderVideo: (video: VideoData, index: number) => void;
 }
 
 export default function Playlist({
 	navbarVisible,
 	playlist,
 	removeVideo,
+	reorderVideo,
 }: Props) {
 	return (
 		<div
@@ -21,7 +23,7 @@ export default function Playlist({
 			className={styles.playlist}
 		>
 			<div className={styles.container}>
-				{playlist.map((video, i) => (
+				{playlist.map((video, index) => (
 					<div key={video.id} className={styles.video}>
 						{video.thumbnailUrl ? (
 							<Image
@@ -33,7 +35,8 @@ export default function Playlist({
 						) : (
 							<div className={`${styles.placeholder} position-relative`}></div>
 						)}
-						<p>
+						<p className='flex-grow-1 m-0'>{video.title}</p>
+						<div className='d-flex flex-column gap-1 justify-content-between'>
 							<div
 								className={`${styles['remove-video']} btn btn-warning p-0 ms-1 mb-1`}
 								onClick={() => removeVideo(video)}
@@ -64,8 +67,41 @@ export default function Playlist({
 									</g>
 								</svg>
 							</div>
-							{video.title}
-						</p>
+							<div
+								className='btn btn-warning p-0 ms-1 mb-1'
+								onClick={() => reorderVideo(video, index - 1)}
+							>
+								<svg
+									width='24px'
+									fill='#000000'
+									viewBox='0 0 32 32'
+									xmlns='http://www.w3.org/2000/svg'
+								>
+									<g strokeWidth='0'></g>
+									<g strokeLinecap='round' strokeLinejoin='round'></g>
+									<g>
+										<path d='M8 20.695l7.997-11.39L24 20.695z'></path>
+									</g>
+								</svg>
+							</div>
+							<div
+								className='btn btn-warning p-0 ms-1 mb-1'
+								onClick={() => reorderVideo(video, index + 1)}
+							>
+								<svg
+									width='24px'
+									fill='#000000'
+									viewBox='0 0 32 32'
+									xmlns='http://www.w3.org/2000/svg'
+								>
+									<g strokeWidth='0'></g>
+									<g strokeLinecap='round' strokeLinejoin='round'></g>
+									<g>
+										<path d='M24 11.305l-7.997 11.39L8 11.305z'></path>
+									</g>
+								</svg>
+							</div>
+						</div>
 					</div>
 				))}
 			</div>
