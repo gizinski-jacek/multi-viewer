@@ -21,7 +21,7 @@ export default function App() {
 	const videoListParams = useSearchParams().get('list');
 	const [fetching, setFetching] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
-	const [videoData, setVideoData] = useState<VideoData[]>([]);
+	const [videoListData, setVideoListData] = useState<VideoData[]>([]);
 	const [showChat, setShowChat] = useState<boolean>(false);
 	const [activeChat, setActiveChat] = useState<VideoData | null>(null);
 	const [gridColSize, setGridColSize] = useState<1 | 2>(1);
@@ -35,7 +35,7 @@ export default function App() {
 		(async () => {
 			if (!videoListParams) return;
 			const videoData = await getDataFromParams(videoListParams);
-			setVideoData(videoData);
+			setVideoListData(videoData);
 		})();
 	}, [videoListParams]);
 
@@ -52,14 +52,16 @@ export default function App() {
 				return;
 			}
 			const id = extractVideoId(host, userInput);
-			if (videoData.find((vid) => vid.id === id && vid.host === host)) {
+			if (
+				videoListData.find((video) => video.id === id && video.host === host)
+			) {
 				setError('Video already on the list');
 				return;
 			}
 			setFetching(true);
 			const data = await getVideoData(host, id);
-			const newVideoDataState = [...videoData, data];
-			setVideoData(newVideoDataState);
+			const newVideoDataState = [...videoListData, data];
+			setVideoListData(newVideoDataState);
 			const params = createURLParams(newVideoDataState);
 			window.history.pushState(null, '', params);
 			setFetching(false);
@@ -85,10 +87,10 @@ export default function App() {
 			setError('Error removing video');
 			return;
 		}
-		const newVideoDataState = videoData.filter((v) =>
-			v.id === video.id ? (v.host === video.host ? false : true) : true
+		const newVideoDataState = videoListData.filter((vid) =>
+			vid.id === video.id ? (vid.host === video.host ? false : true) : true
 		);
-		setVideoData(newVideoDataState);
+		setVideoListData(newVideoDataState);
 		const newParams = createURLParams(newVideoDataState);
 		window.history.pushState(null, '', newParams);
 		if (activeChat?.id === video.id && activeChat.host === video.host) {
@@ -97,13 +99,25 @@ export default function App() {
 		}
 	}
 
+	function handleReorderVideo(video: VideoData, index: number) {
+		// ToDo: Find reason why videos moved to earlier index don't get rerendered while all others do.
+		if (index < 0 || index >= videoListData.length) return;
+		const newState = videoListData.filter((vid) =>
+			vid.id === video.id ? (vid.host === video.host ? false : true) : true
+		);
+		newState.splice(index, 0, video);
+		const newParams = createURLParams(newState);
+		window.history.pushState(null, '', newParams);
+		setVideoListData(newState);
+	}
+
 	function handleChatToggle() {
 		if (showPlaylist) {
 			setShowPlaylist(false);
 			setShowChat(true);
 		} else {
 			if (!showChat && !activeChat) {
-				const chat = videoData.find((v) => v.livestreamChat);
+				const chat = videoListData.find((video) => video.livestreamChat);
 				if (!chat) return;
 				setActiveChat(chat);
 			}
@@ -125,7 +139,7 @@ export default function App() {
 			setGridColSize(1);
 		}
 		if (window.innerWidth >= 1000 && window.innerWidth < 1300) {
-			if (videoData.length > 1) {
+			if (videoListData.length > 1) {
 				if (showChat) {
 					setGridColSize(1);
 				} else {
@@ -136,17 +150,17 @@ export default function App() {
 			}
 		}
 		if (window.innerWidth >= 1300) {
-			if (videoData.length > 1) {
+			if (videoListData.length > 1) {
 				setGridColSize(2);
 			} else {
 				setGridColSize(1);
 			}
 		}
-	}, [videoData, showChat, manualGridColSize]);
+	}, [videoListData, showChat, manualGridColSize]);
 
 	useEffect(() => {
 		watchResize();
-	}, [videoData, showChat, watchResize]);
+	}, [videoListData, showChat, watchResize]);
 
 	useEffect(() => {
 		if (typeof window === 'undefined') return;
@@ -183,15 +197,15 @@ export default function App() {
 			<Navbar
 				addVideo={handleAddVideo}
 				toggleChat={handleChatToggle}
-				activeChat={!!videoData.find((v) => v.livestreamChat)}
+				activeChat={!!videoListData.find((video) => video.livestreamChat)}
 				showNavbar={showNavbar}
 				toggleNavbar={toggleNavbarVisibility}
 				togglePlaylist={handlePlaylistToggle}
-				disablePlaylist={!videoData.length}
+				disablePlaylist={!videoListData.length}
 				toggleLayout={handleLayoutToggle}
 				manualGridColSize={manualGridColSize}
 			/>
-			{error && !!videoData.length && (
+			{error && !!videoListData.length && (
 				<div className={styles['error-absolute']} onClick={dismissError}>
 					{error}
 				</div>
@@ -210,8 +224,12 @@ export default function App() {
 							: styles[`grid-size-${manualGridColSize}`]
 					} ${showNavbar ? 'gap-2' : 'gap-1'}`}
 				>
-					{videoData.map((video) => (
-						<VideoWrapper video={video} removeVideo={handleRemoveVideo} />
+					{videoListData.map((video) => (
+						<VideoWrapper
+							key={video.id}
+							video={video}
+							removeVideo={handleRemoveVideo}
+						/>
 					))}
 					{fetching && (
 						<div
@@ -228,7 +246,7 @@ export default function App() {
 							/>
 						</div>
 					)}
-					{error && !videoData.length && (
+					{error && !videoListData.length && (
 						<div className={styles.error} onClick={dismissError}>
 							{error}
 						</div>
@@ -238,7 +256,7 @@ export default function App() {
 					<div className={styles.sidebar}>
 						{showChat && (
 							<Chat
-								videoData={videoData}
+								videoData={videoListData}
 								activeChat={activeChat}
 								changeChat={handleChangeChat}
 							/>
@@ -246,8 +264,9 @@ export default function App() {
 						{showPlaylist && (
 							<Playlist
 								navbarVisible={showNavbar}
-								playlist={videoData}
+								playlist={videoListData}
 								removeVideo={handleRemoveVideo}
+								reorderVideo={handleReorderVideo}
 							/>
 						)}
 					</div>
