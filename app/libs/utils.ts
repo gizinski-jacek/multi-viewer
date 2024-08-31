@@ -133,7 +133,9 @@ export function formatFetchError(error: unknown): NextResponse<{
 export function createURLParams(data: VideoData[]): string {
 	return (
 		'?list=' +
-		encodeURIComponent(data.map((v) => v.host + '+' + v.id).join('--'))
+		encodeURIComponent(
+			data.map((video) => video.host + '+' + video.id).join('--')
+		)
 	);
 }
 

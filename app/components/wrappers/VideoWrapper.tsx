@@ -10,7 +10,7 @@ interface Props {
 
 export default function VideoWrapper({ video, removeVideo }: Props) {
 	return (
-		<div key={video.id} className={styles.video}>
+		<div className={styles.video}>
 			<div
 				className={`${styles['remove-video']} btn btn-warning`}
 				onClick={() => removeVideo(video)}
