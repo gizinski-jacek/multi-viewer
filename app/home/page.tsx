@@ -99,13 +99,20 @@ export default function App() {
 		}
 	}
 
-	function handleReorderVideo(video: VideoData, index: number) {
-		// ToDo: Find reason why videos moved to earlier index don't get rerendered while all others do.
-		if (index < 0 || index >= videoListData.length) return;
+	function handleReorderVideo(video: VideoData, targetIndex: number) {
+		// ToDo: Find reason why videos pushed down the list (higher index) by items moved
+		// ToDO: by user up the list (lower index) get re-rendered while others do not.
+		if (targetIndex === undefined || !video) return;
 		const newState = videoListData.filter((vid) =>
 			vid.id === video.id ? (vid.host === video.host ? false : true) : true
 		);
-		newState.splice(index, 0, video);
+		if (targetIndex < 0) {
+			newState.splice(videoListData.length - 1, 0, video);
+		} else if (targetIndex >= videoListData.length) {
+			newState.splice(0, 0, video);
+		} else {
+			newState.splice(targetIndex, 0, video);
+		}
 		const newParams = createURLParams(newState);
 		window.history.pushState(null, '', newParams);
 		setVideoListData(newState);
@@ -135,12 +142,12 @@ export default function App() {
 
 	const watchResize = useCallback(() => {
 		if (manualGridColSize !== 'auto') return;
-		if (window.innerWidth < 1000) {
+		if (window.innerWidth < 768) {
 			setGridColSize(1);
 		}
-		if (window.innerWidth >= 1000 && window.innerWidth < 1300) {
+		if (window.innerWidth >= 768 && window.innerWidth < 1100) {
 			if (videoListData.length > 1) {
-				if (showChat) {
+				if (showChat || showPlaylist) {
 					setGridColSize(1);
 				} else {
 					setGridColSize(2);
@@ -149,14 +156,14 @@ export default function App() {
 				setGridColSize(1);
 			}
 		}
-		if (window.innerWidth >= 1300) {
+		if (window.innerWidth >= 1100) {
 			if (videoListData.length > 1) {
 				setGridColSize(2);
 			} else {
 				setGridColSize(1);
 			}
 		}
-	}, [videoListData, showChat, manualGridColSize]);
+	}, [videoListData, showChat, manualGridColSize, showPlaylist]);
 
 	useEffect(() => {
 		watchResize();
