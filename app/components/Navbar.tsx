@@ -53,7 +53,7 @@ export default function Navbar({
 						Select host
 					</label>
 					<select
-						className='ms-1 px-1'
+						className='px-1'
 						id='host'
 						name='host'
 						value={host}
@@ -74,7 +74,7 @@ export default function Navbar({
 						Link/Id
 					</label>
 					<input
-						className='ms-1 px-1'
+						className='px-1'
 						id='userInput'
 						name='userInput'
 						type='text'
