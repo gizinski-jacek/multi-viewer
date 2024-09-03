@@ -12,7 +12,7 @@ export default function VideoWrapper({ video, removeVideo }: Props) {
 	return (
 		<div className={styles.video}>
 			<div
-				className={`${styles['remove-video']} btn btn-warning`}
+				className={`${styles['remove-video']} btn btn-danger`}
 				onClick={() => removeVideo(video)}
 			>
 				<svg
