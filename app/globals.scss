@@ -2,9 +2,8 @@
 	--font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
 		'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
 		'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
-	--foreground-rgb: 215, 220, 220;
-	--background-rgb: 25, 25, 25;
-	--navbar-rgb: 50, 50, 50;
+	--foreground-color: #dcdcdc;
+	--background-color: #101010;
 }
 
 * {
@@ -20,8 +19,8 @@ body {
 }
 
 body {
-	color: rgb(var(--foreground-rgb));
-	background-color: rgb(var(--background-rgb));
+	color: var(--foreground-color);
+	background-color: var(--background-color);
 }
 
 a {
