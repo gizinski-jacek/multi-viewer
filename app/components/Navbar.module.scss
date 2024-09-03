@@ -7,7 +7,7 @@
 	justify-content: space-between;
 	font-weight: bold;
 	gap: 0.5rem;
-	background-color: rgb(var(--navbar-rgb));
+	background-color: var(--bs-dark);
 	transform-origin: center;
 	transition: all 0.5s ease;
 	position: fixed;
@@ -58,7 +58,7 @@
 		content: '';
 		width: 10px;
 		height: 2px;
-		background-color: rgb(255, 165, 0);
+		background-color: var(--bs-yellow);
 		transform: translateX(-3px) translateY(10px) rotate(40deg);
 	}
 
