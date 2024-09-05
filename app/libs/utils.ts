@@ -2,41 +2,55 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { Hosts, VideoData } from './types';
 import { NextResponse } from 'next/server';
 
-export function extractVideoId(host: Hosts, string: string): string {
-	if (!host) throw new Error('Select video host');
+export function extractVideoId(
+	host: Hosts,
+	string: string
+): string | undefined {
 	const str =
 		string[string.length - 1] === '/'
 			? string.slice(0, string.length - 1)
 			: string;
 	switch (host) {
 		case 'youtube':
-			let idYT = str
-				.replace('https://youtu.be/', '')
-				.replace('https://www.youtube.com/watch?v=', '')
-				.replace('https://www.youtube.com/live/', '');
-			if (idYT.indexOf('&list=') > 1) {
-				idYT = idYT.slice(0, idYT.indexOf('&list='));
-			}
-			if (idYT.indexOf('?si=') > 1) {
+			let idYT = str;
+			if (idYT.includes('?si=')) {
 				idYT = idYT.slice(0, idYT.indexOf('?si='));
+			}
+			if (idYT.includes('?v=')) {
+				idYT = idYT.slice(idYT.indexOf('?v=') + 3);
+			}
+			if (idYT.includes('.be/')) {
+				idYT = idYT.slice(idYT.indexOf('.be/') + 4);
+			}
+			if (idYT.includes('/live/')) {
+				idYT = idYT.slice(idYT.indexOf('/live/') + 6);
 			}
 			return idYT;
 		case 'youtube-playlist':
-			let idYTP = str
-				.replace('https://youtube.com/playlist?list=', '')
-				.replace('https://www.youtube.com/playlist?list=', '');
+			let idYTP = str;
 			if (idYTP.includes('?si=')) {
 				idYTP = idYTP.slice(0, idYTP.indexOf('?si='));
 			}
+			if (idYTP.includes('?list=')) {
+				idYTP = idYTP.slice(idYTP.indexOf('?list=') + 6);
+			}
 			return idYTP;
-		case 'twitch':
 		case 'twitch-vod':
+			let idTTVVod = str;
+			if (idTTVVod.includes('/videos/')) {
+				idTTVVod = idTTVVod.slice(str.indexOf('/videos/') + 8);
+			}
+			if (idTTVVod.includes('?')) {
+				idTTVVod = idTTVVod.slice(0, idTTVVod.indexOf('?'));
+			}
+			return idTTVVod;
+		case 'twitch':
 		case 'dailymotion':
 		case 'dailymotion-playlist':
 		case 'vimeo':
 			return str.slice(str.lastIndexOf('/') + 1);
 		default:
-			throw new Error('Unsupported host or incorrect ID');
+			break;
 	}
 }
 
@@ -130,7 +144,8 @@ export function formatFetchError(error: unknown): NextResponse<{
 	}
 }
 
-export function createURLParams(data: VideoData[]): string {
+export function createURLParams(data: VideoData[]): string | undefined {
+	if (data.length === 0) return;
 	return (
 		'?list=' +
 		encodeURIComponent(
