@@ -51,10 +51,19 @@ export default function App() {
 				setError('Provide video link or ID');
 				return;
 			}
+			if (!host) {
+				setError('Select video host');
+				return;
+			}
 			const id = extractVideoId(host, userInput);
-			if (
-				videoListData.find((video) => video.id === id && video.host === host)
-			) {
+			if (!id) {
+				setError('Unsupported host or incorrect Id');
+				return;
+			}
+			const videoOnList = videoListData.find(
+				(video) => video.id === id && video.host === host
+			);
+			if (videoOnList) {
 				setError('Video already on the list');
 				return;
 			}
@@ -63,7 +72,11 @@ export default function App() {
 			const newVideoDataState = [...videoListData, data];
 			setVideoListData(newVideoDataState);
 			const params = createURLParams(newVideoDataState);
-			window.history.pushState(null, '', params);
+			window.history.pushState(
+				null,
+				'',
+				params || window.location.origin + window.location.pathname
+			);
 			setFetching(false);
 		} catch (error: unknown) {
 			if (error instanceof NextResponse) {
@@ -81,7 +94,6 @@ export default function App() {
 			setFetching(false);
 		}
 	}
-
 	function handleRemoveVideo(video: VideoData) {
 		if (!video) {
 			setError('Error removing video');
@@ -92,7 +104,11 @@ export default function App() {
 		);
 		setVideoListData(newVideoDataState);
 		const newParams = createURLParams(newVideoDataState);
-		window.history.pushState(null, '', newParams);
+		window.history.pushState(
+			null,
+			'',
+			newParams || window.location.origin + window.location.pathname
+		);
 		if (activeChat?.id === video.id && activeChat.host === video.host) {
 			setActiveChat(null);
 			setShowChat(false);
@@ -114,7 +130,11 @@ export default function App() {
 			newState.splice(targetIndex, 0, video);
 		}
 		const newParams = createURLParams(newState);
-		window.history.pushState(null, '', newParams);
+		window.history.pushState(
+			null,
+			'',
+			newParams || window.location.origin + window.location.pathname
+		);
 		setVideoListData(newState);
 	}
 
@@ -233,7 +253,7 @@ export default function App() {
 				>
 					{videoListData.map((video) => (
 						<VideoWrapper
-							key={video.id}
+							key={video.channelId}
 							video={video}
 							removeVideo={handleRemoveVideo}
 						/>
