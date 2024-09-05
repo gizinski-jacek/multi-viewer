@@ -7,7 +7,7 @@ export default function App() {
 	const { push } = useRouter();
 
 	useEffect(() => {
-		push('/home');
+		push('/watch');
 	}, [push]);
 
 	return <div></div>;

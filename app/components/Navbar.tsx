@@ -41,7 +41,7 @@ export default function Navbar({
 
 	return (
 		<nav className={showNavbar ? styles['navbar'] : styles['navbar-hidden']}>
-			<Link href={'/home'} className='d-none d-sm-inline-block my-auto'>
+			<Link href={'/watch'} className='d-none d-sm-inline-block my-auto'>
 				MultiViewer
 			</Link>
 			<form
