@@ -16,18 +16,19 @@ export default function Chat({ videoData, activeChat, changeChat }: Props) {
 				<>
 					<div className={styles['chat-list']}>
 						{videoData.map(
-							(vid) =>
-								vid.livestreamChat && (
+							(video) =>
+								video.livestreamChat && (
 									<div
 										className={`btn p-0 px-1 text-nowrap overflow-hidden ${
-											activeChat?.id === vid.id && activeChat?.host === vid.host
+											activeChat?.id === video.id &&
+											activeChat?.host === video.host
 												? 'btn-primary'
 												: 'btn-secondary'
 										}`}
-										key={vid.id}
-										onClick={() => changeChat(vid)}
+										key={video.id}
+										onClick={() => changeChat(video)}
 									>
-										{vid.channelName}
+										{video.channelName}
 									</div>
 								)
 						)}
