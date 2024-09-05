@@ -24,8 +24,8 @@ export default function Playlist({
 		>
 			<div className={styles.container}>
 				{playlist.map((video, index) => (
-					<>
-						<div key={video.id} className={styles.video}>
+					<div key={video.id}>
+						<div className={styles.video}>
 							{video.thumbnailUrl ? (
 								<Image
 									src={video.thumbnailUrl}
@@ -105,7 +105,7 @@ export default function Playlist({
 							</div>
 						</div>
 						{index !== playlist.length - 1 && <hr />}
-					</>
+					</div>
 				))}
 			</div>
 		</div>
