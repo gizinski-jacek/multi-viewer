@@ -49,11 +49,14 @@ export async function GET(
 			host: 'twitch-vod',
 			id: res.data.data[0].id,
 			title: res.data.data[0].title,
-			channelId: res.data.data[0].stream_id,
+			channelId: res.data.data[0].user_id,
 			channelName: res.data.data[0].user_name,
 			iFrameSrcId: res.data.data[0].id,
 			livestreamChat: true,
-			thumbnailUrl: res.data.data[0].thumbnail_url,
+			thumbnailUrl: res.data.data[0].thumbnail_url.replace(
+				'%{width}x%{height}',
+				'120x90'
+			),
 		};
 		return NextResponse.json(data, { status: 200 });
 	} catch (error: unknown) {
