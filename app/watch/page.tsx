@@ -253,7 +253,7 @@ export default function App() {
 				>
 					{videoListData.map((video) => (
 						<VideoWrapper
-							key={video.channelId}
+							key={video.id}
 							video={video}
 							removeVideo={handleRemoveVideo}
 						/>
