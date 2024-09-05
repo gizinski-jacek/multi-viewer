@@ -17,27 +17,21 @@ export default function VideoWrapper({ video, removeVideo }: Props) {
 			>
 				<svg
 					width='24px'
-					viewBox='-0.5 0 25 25'
+					viewBox='0 0 24 24'
 					fill='none'
 					xmlns='http://www.w3.org/2000/svg'
 				>
-					<g strokeWidth='0'></g>
 					<g strokeLinecap='round' strokeLinejoin='round'></g>
 					<g>
-						<path
-							d='M3 21.32L21 3.32001'
-							stroke='#000000'
-							strokeWidth='2.5'
-							strokeLinecap='round'
-							strokeLinejoin='round'
-						></path>
-						<path
-							d='M3 3.32001L21 21.32'
-							stroke='#000000'
-							strokeWidth='2.5'
-							strokeLinecap='round'
-							strokeLinejoin='round'
-						></path>
+						<g>
+							<path
+								d='M18 18L12 12M12 12L6 6M12 12L18 6M12 12L6 18'
+								stroke='#000000'
+								strokeWidth='2'
+								strokeLinecap='round'
+								strokeLinejoin='round'
+							></path>
+						</g>
 					</g>
 				</svg>
 			</div>
