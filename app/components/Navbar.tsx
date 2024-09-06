@@ -136,7 +136,7 @@ export default function Navbar({
 					onClick={toggleLayout}
 				>
 					{manualGridColSize === 'auto' ? (
-						<h4>A</h4>
+						<h3>A</h3>
 					) : manualGridColSize === 1 ? (
 						<svg
 							width='24px'
