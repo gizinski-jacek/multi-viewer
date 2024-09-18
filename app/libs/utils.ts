@@ -138,8 +138,11 @@ export function formatFetchError(error: unknown): NextResponse<{
 		);
 	} else {
 		return NextResponse.json(
-			{ error: 'Unknown server error' },
-			{ status: 500, statusText: 'Unknown server error' }
+			{ error: (error as Error)?.message || 'Unknown server error' },
+			{
+				status: 500,
+				statusText: (error as Error)?.message || 'Unknown server error',
+			}
 		);
 	}
 }
