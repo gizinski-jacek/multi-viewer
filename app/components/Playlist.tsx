@@ -17,10 +17,9 @@ export default function Playlist({
 }: Props) {
 	return (
 		<div
-			style={{
-				height: navbarVisible ? 'calc(100vh - 80px)' : '100vh',
-			}}
-			className={styles.playlist}
+			className={`${styles.playlist} ${
+				navbarVisible ? styles.visible : styles.hidden
+			}`}
 		>
 			<div className={styles.container}>
 				{playlist.map((video, index) => (
@@ -29,7 +28,7 @@ export default function Playlist({
 							{video.thumbnailUrl ? (
 								<Image
 									src={video.thumbnailUrl}
-									width={120}
+									width={130}
 									height={90}
 									alt={`${video.title} thumbnail` || 'Video thumbnail'}
 								/>
