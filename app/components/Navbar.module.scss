@@ -17,14 +17,13 @@
 	z-index: 100;
 
 	input,
-	select {
+	select,
+	option {
+		font-family: inherit;
 		height: 100%;
 		font-weight: bold;
 		font-size: 0.9rem;
 		max-width: 120px;
-	}
-
-	select {
 		text-transform: capitalize;
 	}
 
