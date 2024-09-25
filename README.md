@@ -60,7 +60,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 Don't forget to add **.env** file with these environment variables for the app:
 
 ```
-NEXT_PUBLIC_EMBED_DOMAIN    //
+NEXT_PUBLIC_EMBED_DOMAIN
 YOUTUBE_API_KEY
 TWITCH_CLIENT_ID
 TWITCH_CLIENT_SECRET
