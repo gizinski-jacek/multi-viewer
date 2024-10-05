@@ -34,6 +34,9 @@ export function extractVideoId(
 			if (idYTP.includes('?list=')) {
 				idYTP = idYTP.slice(idYTP.indexOf('?list=') + 6);
 			}
+			if (idYTP.includes('&list=')) {
+				idYTP = idYTP.slice(idYTP.indexOf('&list=') + 6);
+			}
 			return idYTP;
 		case 'twitch-vod':
 			let idTTVVod = str;
