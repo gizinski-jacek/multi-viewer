@@ -60,8 +60,8 @@
 .sidebar {
 	position: relative;
 	display: grid;
-	grid-template-columns: 1;
-	grid-template-rows: 1;
+	grid-template-columns: 1fr;
+	grid-template-rows: 1fr;
 	max-width: 100%;
 	height: fit-content;
 	max-height: fit-content;
