@@ -14,11 +14,11 @@ export default function Chat({ videoData, activeChat, changeChat }: Props) {
 		<div className={styles.chat}>
 			{videoData.length ? (
 				<>
-					<div className={styles['chat-list']}>
+					<ul className={styles['chat-list']}>
 						{videoData.map(
 							(video) =>
 								video.livestreamChat && (
-									<div
+									<li
 										className={`btn p-0 px-1 text-nowrap overflow-hidden ${
 											activeChat?.id === video.id &&
 											activeChat?.host === video.host
@@ -29,10 +29,10 @@ export default function Chat({ videoData, activeChat, changeChat }: Props) {
 										onClick={() => changeChat(video)}
 									>
 										{video.channelName}
-									</div>
+									</li>
 								)
 						)}
-					</div>
+					</ul>
 					<div className='flex-fill'>
 						{activeChat && (
 							<IFrameWrapper

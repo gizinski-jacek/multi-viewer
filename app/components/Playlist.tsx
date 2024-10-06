@@ -21,9 +21,9 @@ export default function Playlist({
 				navbarVisible ? styles.visible : styles.hidden
 			}`}
 		>
-			<div className={styles.container}>
+			<ul className={styles.container}>
 				{playlist.map((video, index) => (
-					<div key={video.id}>
+					<li key={video.id}>
 						<div className={styles.video}>
 							{video.thumbnailUrl ? (
 								<Image
@@ -104,9 +104,9 @@ export default function Playlist({
 							</div>
 						</div>
 						{index !== playlist.length - 1 && <hr />}
-					</div>
+					</li>
 				))}
-			</div>
+			</ul>
 		</div>
 	);
 }
