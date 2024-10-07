@@ -1,3 +1,14 @@
+export const hostList: Hosts[] = [
+	'',
+	'youtube',
+	'youtube-playlist',
+	'twitch',
+	'twitch-vod',
+	'dailymotion',
+	'dailymotion-playlist',
+	'vimeo',
+];
+
 export type Hosts =
 	| 'youtube'
 	| 'youtube-playlist'
