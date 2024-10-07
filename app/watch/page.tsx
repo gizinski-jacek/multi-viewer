@@ -41,12 +41,6 @@ export default function App() {
 
 	async function handleAddVideo(host: Hosts, userInput: string) {
 		try {
-			if (fetching) return;
-			dismissError();
-			if (!host) {
-				setError('Select video host');
-				return;
-			}
 			if (!userInput) {
 				setError('Provide video link or ID');
 				return;
@@ -55,6 +49,8 @@ export default function App() {
 				setError('Select video host');
 				return;
 			}
+			if (fetching) return;
+			dismissError();
 			const id = extractVideoId(host, userInput);
 			if (!id) {
 				setError('Unsupported host or incorrect Id');
@@ -161,33 +157,57 @@ export default function App() {
 	}
 
 	const watchResize = useCallback(() => {
-		if (manualGridColSize !== 'auto') return;
-		if (window.innerWidth < 768) {
-			setGridColSize(1);
-		}
-		if (window.innerWidth >= 768 && window.innerWidth < 1100) {
-			if (videoListData.length > 1) {
-				if (showChat || showPlaylist) {
-					setGridColSize(1);
+		if (screen.width >= screen.height) {
+			if (window.innerWidth < 768) {
+				setGridColSize(1);
+			}
+			if (window.innerWidth >= 768 && window.innerWidth < 1100) {
+				if (videoListData.length > 1) {
+					if (showChat || showPlaylist) {
+						setGridColSize(1);
+					} else {
+						setGridColSize(2);
+					}
 				} else {
-					setGridColSize(2);
+					setGridColSize(1);
 				}
-			} else {
+			}
+			if (window.innerWidth >= 1100) {
+				if (videoListData.length > 1) {
+					setGridColSize(2);
+				} else {
+					setGridColSize(1);
+				}
+			}
+		} else if (screen.width < screen.height) {
+			if (window.innerHeight < 768) {
 				setGridColSize(1);
 			}
-		}
-		if (window.innerWidth >= 1100) {
-			if (videoListData.length > 1) {
-				setGridColSize(2);
-			} else {
-				setGridColSize(1);
+			if (window.innerHeight >= 768 && window.innerHeight < 1100) {
+				if (videoListData.length > 4) {
+					if (showChat || showPlaylist) {
+						setGridColSize(1);
+					} else {
+						setGridColSize(2);
+					}
+				} else {
+					setGridColSize(1);
+				}
+			}
+			if (window.innerHeight >= 1100) {
+				if (videoListData.length > 4) {
+					setGridColSize(2);
+				} else {
+					setGridColSize(1);
+				}
 			}
 		}
-	}, [videoListData, showChat, manualGridColSize, showPlaylist]);
+	}, [videoListData, showChat, showPlaylist]);
 
 	useEffect(() => {
+		if (manualGridColSize !== 'auto') return;
 		watchResize();
-	}, [videoListData, showChat, watchResize]);
+	}, [manualGridColSize, videoListData, showChat, watchResize]);
 
 	useEffect(() => {
 		if (typeof window === 'undefined') return;
