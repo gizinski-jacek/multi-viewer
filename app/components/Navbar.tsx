@@ -1,7 +1,8 @@
 import styles from './Navbar.module.scss';
 import { useState } from 'react';
 import Link from 'next/link';
-import { Hosts } from '../libs/types';
+import { hostList, Hosts } from '../libs/types';
+import { capitalizeWords } from '../libs/utils';
 
 interface Props {
 	addVideo: (host: Hosts, userInput: string) => void;
@@ -59,14 +60,15 @@ export default function Navbar({
 						value={host}
 						onChange={handleHostChange}
 					>
-						<option value=''>Select host</option>
-						<option value='youtube'>Youtube</option>
-						<option value='youtube-playlist'>Youtube Playlist</option>
-						<option value='twitch'>Twitch</option>
-						<option value='twitch-vod'>Twitch VOD</option>
-						<option value='dailymotion'>Dailymotion</option>
-						<option value='dailymotion-playlist'>Dailymotion Playlist</option>
-						<option value='vimeo'>Vimeo</option>
+						{hostList.map((host) => (
+							<option key={host}>
+								{host
+									? host === 'm3u8'
+										? host
+										: capitalizeWords(host.replace('-', ' '))
+									: 'Select host'}
+							</option>
+						))}
 					</select>
 				</fieldset>
 				<fieldset>
