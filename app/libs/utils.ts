@@ -2,6 +2,13 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { Hosts, VideoData } from './types';
 import { NextResponse } from 'next/server';
 
+export function capitalizeWords(string: string): string {
+	return string
+		.split(' ')
+		.map((str) => str.charAt(0).toUpperCase() + str.slice(1))
+		.join(' ');
+}
+
 export function extractVideoId(
 	host: Hosts,
 	string: string
