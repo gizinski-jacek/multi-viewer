@@ -2,6 +2,7 @@ import styles from './VideoWrapper.module.scss';
 import { VideoData } from '@/app/libs/types';
 import { IFrameWrapper } from './IFrameWrapper';
 import { createIFrameVideoSource } from '@/app/libs/utils';
+import HLSWrapper from './HLSWrapper';
 
 interface Props {
 	video: VideoData;
@@ -35,10 +36,14 @@ export default function VideoWrapper({ video, removeVideo }: Props) {
 					</g>
 				</svg>
 			</div>
-			<IFrameWrapper
-				src={createIFrameVideoSource(video.host, video.iFrameSrcId)}
-				title={`${video.host} video player`}
-			/>
+			{video.host === 'm3u8' ? (
+				<HLSWrapper url={video.src} />
+			) : (
+				<IFrameWrapper
+					src={createIFrameVideoSource(video.host, video.src)}
+					title={video.host && `${video.host} video player`}
+				/>
+			)}
 		</div>
 	);
 }
