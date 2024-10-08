@@ -7,9 +7,11 @@ export const hostList: Hosts[] = [
 	'dailymotion',
 	'dailymotion-playlist',
 	'vimeo',
+	'm3u8',
 ];
 
 export type Hosts =
+	| ''
 	| 'youtube'
 	| 'youtube-playlist'
 	| 'twitch'
@@ -17,7 +19,7 @@ export type Hosts =
 	| 'dailymotion'
 	| 'dailymotion-playlist'
 	| 'vimeo'
-	| '';
+	| 'm3u8';
 
 export interface VideoData {
 	host: Hosts;
