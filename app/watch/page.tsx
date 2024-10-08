@@ -157,7 +157,7 @@ export default function App() {
 	}
 
 	const watchResize = useCallback(() => {
-		if (screen.width >= screen.height) {
+		if (screen.orientation.type === 'landscape-primary') {
 			if (window.innerWidth < 768) {
 				setGridColSize(1);
 			}
@@ -179,7 +179,7 @@ export default function App() {
 					setGridColSize(1);
 				}
 			}
-		} else if (screen.width < screen.height) {
+		} else if (screen.orientation.type === 'portrait-primary') {
 			if (window.innerHeight < 768) {
 				setGridColSize(1);
 			}
@@ -268,9 +268,7 @@ export default function App() {
 				</div>
 			)}
 			<main
-				className={`${
-					styles['main']
-				} flex-fill d-flex flex-column flex-md-row ${
+				className={`${styles['main']}  ${
 					showNavbar ? `p-3 gap-2 ${styles['navbar-on']}` : 'p-0 gap-1'
 				}`}
 			>
