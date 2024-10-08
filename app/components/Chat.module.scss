@@ -21,7 +21,13 @@
 	}
 }
 
-@media only screen and (min-width: 768px) {
+@media only screen and (orientation: landscape) and (min-width: 768px) {
+	.chat {
+		height: 100%;
+	}
+}
+
+@media only screen and (orientation: portrait) and (min-width: 1024px) {
 	.chat {
 		height: 100%;
 	}
