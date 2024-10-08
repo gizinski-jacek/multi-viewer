@@ -61,7 +61,7 @@ export default function Navbar({
 						onChange={handleHostChange}
 					>
 						{hostList.map((host) => (
-							<option key={host}>
+							<option key={host} value={host}>
 								{host
 									? host === 'm3u8'
 										? host
