@@ -18,7 +18,7 @@ export async function GET(
 		const id = searchParams.get('id');
 		if (!id)
 			return NextResponse.json(
-				{ error: 'Provide video link or Id' },
+				{ error: 'Provide video link or id' },
 				{ status: 400 }
 			);
 		const res: AxiosResponse<VimeoVideo> = await axios.get(
@@ -36,7 +36,7 @@ export async function GET(
 			title: res.data.name,
 			channelId: res.data.user.uri.replace('/users/', ''),
 			channelName: res.data.user.name,
-			iFrameSrcId: res.data.uri.replace('/videos/', ''),
+			src: res.data.uri.replace('/videos/', ''),
 			livestreamChat: false,
 			thumbnailUrl: null,
 		};

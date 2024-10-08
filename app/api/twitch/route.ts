@@ -21,7 +21,7 @@ export async function GET(
 		const id = searchParams.get('id');
 		if (!id)
 			return NextResponse.json(
-				{ error: 'Provide video link or Id' },
+				{ error: 'Provide video link or id' },
 				{ status: 400 }
 			);
 		const authQuery = querystring.stringify({
@@ -51,7 +51,7 @@ export async function GET(
 			title: res.data.data[0].title,
 			channelId: res.data.data[0].user_id,
 			channelName: res.data.data[0].user_name,
-			iFrameSrcId: res.data.data[0].user_login,
+			src: res.data.data[0].user_login,
 			livestreamChat: true,
 			thumbnailUrl: res.data.data[0].thumbnail_url.replace(
 				'{width}x{height}',

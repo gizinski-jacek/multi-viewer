@@ -11,7 +11,7 @@ export async function GET(
 		const id = searchParams.get('id');
 		if (!id)
 			return NextResponse.json(
-				{ error: 'Provide video link or Id' },
+				{ error: 'Provide video link or id' },
 				{ status: 400 }
 			);
 		const fields = ['id', 'name', 'owner.id', 'owner.username'];
@@ -27,7 +27,7 @@ export async function GET(
 			title: res.data.name,
 			channelId: res.data['owner.id'],
 			channelName: res.data['owner.username'],
-			iFrameSrcId: res.data.id,
+			src: res.data.id,
 			livestreamChat: false,
 			thumbnailUrl: null,
 		};
