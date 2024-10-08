@@ -73,7 +73,7 @@ export async function getVideoData(
 			throw new Error('Select video host');
 		}
 		if (!id) {
-			throw new Error('Provide video link or ID');
+			throw new Error('Provide video link or id');
 		}
 		const res: AxiosResponse<VideoData> = await axios.get(
 			`/api/${host}?id=${id}`,
@@ -162,13 +162,13 @@ export function createURLParams(data: VideoData[]): string | undefined {
 	return (
 		'?list=' +
 		encodeURIComponent(
-			data.map((video) => video.host + '+' + video.id).join('--')
+			data.map((video) => video.host + '+' + video.id).join('&')
 		)
 	);
 }
 
-export async function getDataFromParams(string: string): Promise<VideoData[]> {
-	const array = decodeURIComponent(string).split('--');
+export async function getDataFromParams(params: string): Promise<VideoData[]> {
+	const array = decodeURIComponent(params).split('&');
 	const results = (await Promise.allSettled(
 		array.map(
 			(param) =>
