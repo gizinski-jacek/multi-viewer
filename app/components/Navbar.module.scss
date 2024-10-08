@@ -16,6 +16,10 @@
 	right: 0;
 	z-index: 100;
 
+	.home-link {
+		display: none;
+	}
+
 	input,
 	select {
 		font-family: inherit;
@@ -73,6 +77,12 @@
 
 @media only screen and (min-width: 768px) {
 	.navbar {
+		.home-link {
+			display: inline-block;
+			margin: auto 0;
+			cursor: pointer;
+		}
+
 		input,
 		select {
 			width: 200px;

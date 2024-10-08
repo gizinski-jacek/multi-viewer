@@ -33,16 +33,16 @@ export default function App() {
 
 	useEffect(() => {
 		(async () => {
-			if (!videoListParams) return;
+			if (!videoListParams || videoListData.length > 0) return;
 			const videoData = await getDataFromParams(videoListParams);
 			setVideoListData(videoData);
 		})();
-	}, [videoListParams]);
+	}, [videoListParams, videoListData]);
 
 	async function handleAddVideo(host: Hosts, userInput: string) {
 		try {
 			if (!userInput) {
-				setError('Provide video link or ID');
+				setError('Provide video link or id');
 				return;
 			}
 			if (!host) {
@@ -51,7 +51,7 @@ export default function App() {
 			}
 			if (fetching) return;
 			dismissError();
-			const id = extractVideoId(host, userInput);
+			const id = host === 'm3u8' ? userInput : extractVideoId(host, userInput);
 			if (!id) {
 				setError('Unsupported host or incorrect Id');
 				return;
@@ -66,13 +66,13 @@ export default function App() {
 			setFetching(true);
 			const data = await getVideoData(host, id);
 			const newVideoDataState = [...videoListData, data];
-			setVideoListData(newVideoDataState);
 			const params = createURLParams(newVideoDataState);
 			window.history.pushState(
 				null,
 				'',
 				params || window.location.origin + window.location.pathname
 			);
+			setVideoListData(newVideoDataState);
 			setFetching(false);
 		} catch (error: unknown) {
 			if (error instanceof NextResponse) {
@@ -98,13 +98,13 @@ export default function App() {
 		const newVideoDataState = videoListData.filter((vid) =>
 			vid.id === video.id ? (vid.host === video.host ? false : true) : true
 		);
-		setVideoListData(newVideoDataState);
 		const newParams = createURLParams(newVideoDataState);
 		window.history.pushState(
 			null,
 			'',
 			newParams || window.location.origin + window.location.pathname
 		);
+		setVideoListData(newVideoDataState);
 		if (activeChat?.id === video.id && activeChat.host === video.host) {
 			setActiveChat(null);
 			setShowChat(false);
@@ -150,7 +150,7 @@ export default function App() {
 
 	function handleChangeChat(data: VideoData) {
 		if (!data) {
-			setError('Provide Id');
+			setError('Chat switching error');
 			return;
 		}
 		setActiveChat(data);
@@ -239,10 +239,20 @@ export default function App() {
 		}
 	}
 
+	function handleRedirect() {
+		window.history.pushState(
+			null,
+			'',
+			window.location.origin + window.location.pathname
+		);
+		setVideoListData([]);
+	}
+
 	return (
 		<div className={styles.app}>
 			<Navbar
 				addVideo={handleAddVideo}
+				redirect={handleRedirect}
 				toggleChat={handleChatToggle}
 				activeChat={!!videoListData.find((video) => video.livestreamChat)}
 				showNavbar={showNavbar}

@@ -1,11 +1,11 @@
 import styles from './Navbar.module.scss';
 import { useState } from 'react';
-import Link from 'next/link';
 import { hostList, Hosts } from '../libs/types';
 import { capitalizeWords } from '../libs/utils';
 
 interface Props {
 	addVideo: (host: Hosts, userInput: string) => void;
+	redirect: () => void;
 	toggleChat: (host: string, userInput: string) => void;
 	activeChat: boolean;
 	showNavbar: boolean;
@@ -18,6 +18,7 @@ interface Props {
 
 export default function Navbar({
 	addVideo,
+	redirect,
 	toggleChat,
 	activeChat,
 	showNavbar,
@@ -42,9 +43,9 @@ export default function Navbar({
 
 	return (
 		<nav className={showNavbar ? styles['navbar'] : styles['navbar-hidden']}>
-			<Link href={'/watch'} className='d-none d-sm-inline-block my-auto'>
+			<div className={styles['home-link']} onClick={redirect}>
 				MultiViewer
-			</Link>
+			</div>
 			<form
 				className='d-flex flex-row gap-2'
 				onSubmit={(e) => e.preventDefault()}
@@ -73,7 +74,7 @@ export default function Navbar({
 				</fieldset>
 				<fieldset>
 					<label className='d-none text-capitalize' htmlFor='userInput'>
-						Link/Id
+						Link or id
 					</label>
 					<input
 						className='px-1'
@@ -82,7 +83,7 @@ export default function Navbar({
 						type='text'
 						value={userInput}
 						onChange={handleUserInputChange}
-						placeholder='Provide Link/Id'
+						placeholder={host === 'm3u8' ? 'm3u8 link' : 'Link or id'}
 					/>
 				</fieldset>
 				<button
