@@ -12,9 +12,12 @@
 	flex-direction: column;
 	overflow: hidden;
 	transition: all 0.5s ease;
+	gap: 0.25rem;
+	padding: 0.5rem;
+	padding-top: calc(48px + 0.5rem);
 
-	&.navbar-on {
-		padding-top: calc(48px + 1rem) !important;
+	&.navbar-hidden {
+		padding: 0 !important;
 	}
 }
 

@@ -268,8 +268,8 @@ export default function App() {
 				</div>
 			)}
 			<main
-				className={`${styles['main']}  ${
-					showNavbar ? `p-3 gap-2 ${styles['navbar-on']}` : 'p-0 gap-1'
+				className={`${styles['main']} ${
+					showNavbar ? '' : styles['navbar-hidden']
 				}`}
 			>
 				<div
