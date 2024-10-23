@@ -27,7 +27,6 @@ export interface VideoData {
 	title: string | null;
 	channelId: string | null;
 	channelName: string;
-	src: string;
 	livestreamChat: boolean;
 	thumbnailUrl: string | null;
 }

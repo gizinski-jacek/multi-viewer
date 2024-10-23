@@ -51,7 +51,6 @@ export async function GET(
 			title: res.data.data[0].title,
 			channelId: res.data.data[0].user_id,
 			channelName: res.data.data[0].user_name,
-			src: res.data.data[0].user_login,
 			livestreamChat: true,
 			thumbnailUrl: res.data.data[0].thumbnail_url.replace(
 				'{width}x{height}',

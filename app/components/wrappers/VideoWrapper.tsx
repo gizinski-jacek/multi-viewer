@@ -37,10 +37,10 @@ export default function VideoWrapper({ video, removeVideo }: Props) {
 				</svg>
 			</div>
 			{video.host === 'm3u8' ? (
-				<HLSWrapper url={video.src} />
+				<HLSWrapper url={video.id} />
 			) : (
 				<IFrameWrapper
-					src={createIFrameVideoSource(video.host, video.src)}
+					src={createIFrameVideoSource(video.host, video.id)}
 					title={video.host && `${video.host} video player`}
 				/>
 			)}

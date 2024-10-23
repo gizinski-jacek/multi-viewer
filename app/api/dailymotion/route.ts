@@ -24,7 +24,6 @@ export async function GET(
 			title: res.data.title,
 			channelId: res.data['owner.id'],
 			channelName: res.data['owner.username'],
-			src: res.data.id,
 			livestreamChat: false,
 			thumbnailUrl: null,
 		};

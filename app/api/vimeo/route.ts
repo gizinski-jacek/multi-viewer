@@ -36,7 +36,6 @@ export async function GET(
 			title: res.data.name,
 			channelId: res.data.user.uri.replace('/users/', ''),
 			channelName: res.data.user.name,
-			src: res.data.uri.replace('/videos/', ''),
 			livestreamChat: false,
 			thumbnailUrl: null,
 		};

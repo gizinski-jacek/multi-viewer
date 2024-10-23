@@ -22,7 +22,6 @@ export async function GET(
 			title: null,
 			channelId: null,
 			channelName: 'stream',
-			src: id,
 			livestreamChat: false,
 			thumbnailUrl: null,
 		};

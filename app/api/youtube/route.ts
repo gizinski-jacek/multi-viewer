@@ -37,7 +37,6 @@ export async function GET(
 			title: res.data.items[0].snippet.title,
 			channelId: res.data.items[0].snippet.channelId,
 			channelName: res.data.items[0].snippet.channelTitle,
-			src: res.data.items[0].id,
 			livestreamChat: res.data.items[0].snippet.liveBroadcastContent === 'live',
 			thumbnailUrl: res.data.items[0].snippet.thumbnails.default.url,
 		};
