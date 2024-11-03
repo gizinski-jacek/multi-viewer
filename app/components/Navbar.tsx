@@ -41,6 +41,19 @@ export default function Navbar({
 		setUserInput(value);
 	}
 
+	function handleInputEnterKey(e: React.KeyboardEvent<HTMLInputElement>) {
+		if (e.key === 'Enter' && host && userInput) {
+			setUserInput('');
+			addVideo(host, userInput);
+		}
+	}
+
+	function handleAddVideo() {
+		if (!userInput || !host) return;
+		setUserInput('');
+		addVideo(host, userInput);
+	}
+
 	return (
 		<nav className={showNavbar ? styles['navbar'] : styles['navbar-hidden']}>
 			<div className={styles['home-link']} onClick={redirect}>
@@ -83,13 +96,14 @@ export default function Navbar({
 						type='text'
 						value={userInput}
 						onChange={handleUserInputChange}
+						onKeyDown={handleInputEnterKey}
 						placeholder={host === 'm3u8' ? 'm3u8 link' : 'Link or id'}
 					/>
 				</fieldset>
 				<button
 					className='btn btn-primary py-0 px-2 fw-bold text-uppercase'
 					type='button'
-					onClick={() => addVideo(host, userInput)}
+					onClick={handleAddVideo}
 				>
 					<svg
 						width='24px'
