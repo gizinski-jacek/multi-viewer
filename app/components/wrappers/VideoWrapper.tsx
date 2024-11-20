@@ -1,7 +1,7 @@
 import styles from './VideoWrapper.module.scss';
-import { VideoData } from '@/app/libs/types';
+import { VideoData } from '@/libs/types';
 import { IFrameWrapper } from './IFrameWrapper';
-import { createIFrameVideoSource } from '@/app/libs/utils';
+import { createIFrameVideoSource } from '@/libs/utils';
 import HLSWrapper from './HLSWrapper';
 
 interface Props {

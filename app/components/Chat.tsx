@@ -1,6 +1,6 @@
 import styles from './Chat.module.scss';
-import { VideoData } from '../libs/types';
-import { createIFrameChatSource } from '../libs/utils';
+import { VideoData } from '@/libs/types';
+import { createIFrameChatSource } from '@/libs/utils';
 import { IFrameWrapper } from './wrappers/IFrameWrapper';
 
 interface Props {

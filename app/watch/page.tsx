@@ -7,15 +7,15 @@ import {
 	extractVideoId,
 	getDataFromParams,
 	getVideoData,
-} from '../libs/utils';
-import Navbar from '../components/Navbar';
-import { Hosts, VideoData } from '../libs/types';
-import Loading from '../components/Loading';
+} from '@/libs/utils';
+import Navbar from '@/components/Navbar';
+import { Hosts, VideoData } from '@/libs/types';
+import Loading from '@/components/Loading';
 import { NextResponse } from 'next/server';
 import { useSearchParams } from 'next/navigation';
-import Chat from '../components/Chat';
-import Playlist from '../components/Playlist';
-import VideoWrapper from '../components/wrappers/VideoWrapper';
+import Chat from '@/components/Chat';
+import Playlist from '@/components/Playlist';
+import VideoWrapper from '@/components/wrappers/VideoWrapper';
 
 export default function App() {
 	const videoListParams = useSearchParams().get('list');

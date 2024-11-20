@@ -1,5 +1,5 @@
-import { DailymotionVideo, VideoData } from '@/app/libs/types';
-import { formatFetchError } from '@/app/libs/utils';
+import { DailymotionVideo, VideoData } from '@/libs/types';
+import { formatFetchError } from '@/libs/utils';
 import axios, { AxiosResponse } from 'axios';
 import { NextResponse, type NextRequest } from 'next/server';
 

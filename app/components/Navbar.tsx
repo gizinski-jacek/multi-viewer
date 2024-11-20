@@ -1,7 +1,7 @@
 import styles from './Navbar.module.scss';
 import { useState } from 'react';
-import { hostList, Hosts } from '../libs/types';
-import { capitalizeWords } from '../libs/utils';
+import { hostList, Hosts } from '@/libs/types';
+import { capitalizeWords } from '@/libs/utils';
 
 interface Props {
 	addVideo: (host: Hosts, userInput: string) => void;

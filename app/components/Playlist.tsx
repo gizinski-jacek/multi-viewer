@@ -1,6 +1,6 @@
 import styles from './Playlist.module.scss';
 import Image from 'next/image';
-import { VideoData } from '../libs/types';
+import { VideoData } from '@/libs/types';
 
 interface Props {
 	navbarVisible: boolean;

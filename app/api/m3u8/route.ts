@@ -1,5 +1,5 @@
-import { VideoData } from '@/app/libs/types';
-import { formatFetchError } from '@/app/libs/utils';
+import { VideoData } from '@/libs/types';
+import { formatFetchError } from '@/libs/utils';
 import axios from 'axios';
 import { NextResponse, type NextRequest } from 'next/server';
 

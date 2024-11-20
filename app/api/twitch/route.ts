@@ -1,5 +1,5 @@
-import { TwitchAuth, TwitchStream, VideoData } from '@/app/libs/types';
-import { formatFetchError } from '@/app/libs/utils';
+import { TwitchAuth, TwitchStream, VideoData } from '@/libs/types';
+import { formatFetchError } from '@/libs/utils';
 import axios, { AxiosResponse } from 'axios';
 import { NextResponse, type NextRequest } from 'next/server';
 import querystring from 'querystring';
