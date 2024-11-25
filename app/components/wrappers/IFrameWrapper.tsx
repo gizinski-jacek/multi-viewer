@@ -3,7 +3,7 @@ interface Props {
 	title?: string;
 }
 
-export function IFrameWrapper({ src, title }: Props) {
+export default function IFrameWrapper({ src, title }: Props) {
 	return (
 		<iframe
 			width='100%'
