@@ -90,6 +90,7 @@ export default function App() {
 			setFetching(false);
 		}
 	}
+
 	function handleRemoveVideo(video: VideoData) {
 		if (!video) {
 			setError('Error removing video');
@@ -112,9 +113,11 @@ export default function App() {
 	}
 
 	function handleReorderVideo(video: VideoData, targetIndex: number) {
-		// ToDo: Find reason why videos pushed down the list (higher index) by items moved
-		// ToDO: by user up the list (lower index) get re-rendered while others do not.
-		if (targetIndex === undefined || !video) return;
+		// ! Find reason why videos pushed down the list (higher index) by items moved
+		// ! up the list (lower index) get re-rendered while others do not.
+		if (videoListData.length < 2 || !video || targetIndex === undefined) {
+			return;
+		}
 		const newState = videoListData.filter((vid) =>
 			vid.id === video.id ? (vid.host === video.host ? false : true) : true
 		);
