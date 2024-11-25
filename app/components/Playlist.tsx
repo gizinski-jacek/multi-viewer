@@ -37,8 +37,9 @@ export default function Playlist({
 							)}
 							<p className='flex-grow-1 m-0'>{video.title}</p>
 							<div className='d-flex flex-column justify-content-between'>
-								<div
+								<button
 									className='btn btn-danger rounded-0 p-0'
+									typeof='button'
 									onClick={() => removeVideo(video)}
 								>
 									<svg
@@ -66,10 +67,12 @@ export default function Playlist({
 											></path>
 										</g>
 									</svg>
-								</div>
-								<div
+								</button>
+								<button
 									className='btn btn-warning rounded-0 p-0'
+									typeof='button'
 									onClick={() => reorderVideo(video, index - 1)}
+									disabled={index === 0 || playlist.length < 2}
 								>
 									<svg
 										width='24px'
@@ -83,10 +86,14 @@ export default function Playlist({
 											<path d='M8 20.695l7.997-11.39L24 20.695z'></path>
 										</g>
 									</svg>
-								</div>
-								<div
+								</button>
+								<button
 									className='btn btn-warning rounded-0 p-0'
 									onClick={() => reorderVideo(video, index + 1)}
+									typeof='button'
+									disabled={
+										index === playlist.length - 1 || playlist.length < 2
+									}
 								>
 									<svg
 										width='24px'
@@ -100,7 +107,7 @@ export default function Playlist({
 											<path d='M24 11.305l-7.997 11.39L8 11.305z'></path>
 										</g>
 									</svg>
-								</div>
+								</button>
 							</div>
 						</div>
 						{index !== playlist.length - 1 && <hr />}
