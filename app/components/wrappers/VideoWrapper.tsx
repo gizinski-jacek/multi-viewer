@@ -1,6 +1,6 @@
 import styles from './VideoWrapper.module.scss';
 import { VideoData } from '@/libs/types';
-import { IFrameWrapper } from './IFrameWrapper';
+import IFrameWrapper from './IFrameWrapper';
 import { createIFrameVideoSource } from '@/libs/utils';
 import HLSWrapper from './HLSWrapper';
 
