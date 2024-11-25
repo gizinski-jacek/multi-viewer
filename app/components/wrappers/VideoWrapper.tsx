@@ -12,8 +12,9 @@ interface Props {
 export default function VideoWrapper({ video, removeVideo }: Props) {
 	return (
 		<div className={styles.video}>
-			<div
+			<button
 				className={`${styles['remove-video']} btn btn-danger`}
+				type='button'
 				onClick={() => removeVideo(video)}
 			>
 				<svg
@@ -35,7 +36,7 @@ export default function VideoWrapper({ video, removeVideo }: Props) {
 						</g>
 					</g>
 				</svg>
-			</div>
+			</button>
 			{video.host === 'm3u8' ? (
 				<HLSWrapper url={video.id} />
 			) : (
