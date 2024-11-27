@@ -1,0 +1,197 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components Navbar properly calls addVideo prop only when input and select field values are not null 1`] = `
+<button
+  class="btn btn-primary py-0 px-2 fw-bold text-uppercase"
+  data-testid="handleAddVideo"
+  type="button"
+/>
+`;
+
+exports[`components Navbar renders Navbar component with passed props 1`] = `
+<nav
+  class="navbar"
+  data-testid="Navbar"
+>
+  <form
+    class="d-flex flex-row gap-1"
+  >
+    <fieldset>
+      <label
+        class="d-none text-capitalize"
+        for="host"
+      >
+        Select host
+      </label>
+      <select
+        class="px-1"
+        data-testid="hostSelect"
+        id="host"
+        name="host"
+      >
+        <option
+          data-testid="hostOption"
+          value=""
+        >
+          Select host
+        </option>
+        <option
+          data-testid="hostOption"
+          value="youtube"
+        >
+          Youtube
+        </option>
+        <option
+          data-testid="hostOption"
+          value="youtube-playlist"
+        >
+          Youtube Playlist
+        </option>
+        <option
+          data-testid="hostOption"
+          value="twitch"
+        >
+          Twitch
+        </option>
+        <option
+          data-testid="hostOption"
+          value="twitch-vod"
+        >
+          Twitch Vod
+        </option>
+        <option
+          data-testid="hostOption"
+          value="dailymotion"
+        >
+          Dailymotion
+        </option>
+        <option
+          data-testid="hostOption"
+          value="dailymotion-playlist"
+        >
+          Dailymotion Playlist
+        </option>
+        <option
+          data-testid="hostOption"
+          value="vimeo"
+        >
+          Vimeo
+        </option>
+        <option
+          data-testid="hostOption"
+          value="m3u8"
+        >
+          m3u8
+        </option>
+      </select>
+    </fieldset>
+    <fieldset>
+      <label
+        class="d-none text-capitalize"
+        for="userInput"
+      >
+        Link or id
+      </label>
+      <input
+        class="px-1"
+        data-testid="userInput"
+        id="userInput"
+        name="userInput"
+        placeholder="Link or id"
+        type="text"
+        value=""
+      />
+    </fieldset>
+    <button
+      class="btn btn-primary py-0 px-2 fw-bold text-uppercase"
+      data-testid="handleAddVideo"
+      type="button"
+    />
+  </form>
+</nav>
+`;
+
+exports[`components Navbar renders input field and select with options elements matching hostList, properly changes select and input values 1`] = `
+<select
+  class="px-1"
+  data-testid="hostSelect"
+  id="host"
+  name="host"
+>
+  <option
+    data-testid="hostOption"
+    value=""
+  >
+    Select host
+  </option>
+  <option
+    data-testid="hostOption"
+    value="youtube"
+  >
+    Youtube
+  </option>
+  <option
+    data-testid="hostOption"
+    value="youtube-playlist"
+  >
+    Youtube Playlist
+  </option>
+  <option
+    data-testid="hostOption"
+    value="twitch"
+  >
+    Twitch
+  </option>
+  <option
+    data-testid="hostOption"
+    value="twitch-vod"
+  >
+    Twitch Vod
+  </option>
+  <option
+    data-testid="hostOption"
+    value="dailymotion"
+  >
+    Dailymotion
+  </option>
+  <option
+    data-testid="hostOption"
+    value="dailymotion-playlist"
+  >
+    Dailymotion Playlist
+  </option>
+  <option
+    data-testid="hostOption"
+    value="vimeo"
+  >
+    Vimeo
+  </option>
+  <option
+    data-testid="hostOption"
+    value="m3u8"
+  >
+    m3u8
+  </option>
+</select>
+`;
+
+exports[`components Navbar renders input field and select with options elements matching hostList, properly changes select and input values 2`] = `
+<option
+  data-testid="hostOption"
+  value=""
+>
+  Select host
+</option>
+`;
+
+exports[`components Navbar renders input field and select with options elements matching hostList, properly changes select and input values 3`] = `
+<input
+  class="px-1"
+  data-testid="userInput"
+  id="userInput"
+  name="userInput"
+  placeholder="Link or id"
+  type="text"
+  value=""
+/>
+`;
