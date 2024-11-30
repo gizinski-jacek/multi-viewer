@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import HLSWrapper from '@/components/wrappers/HLSWrapper';
 import IFrameWrapper from '@/components/wrappers/IFrameWrapper';
@@ -59,6 +59,7 @@ const videoData: VideoData = {
 
 describe('wrappers', () => {
 	describe('HSLWrapper component', () => {
+		afterEach(cleanup);
 		it('renders video element with default title', () => {
 			render(<HLSWrapper url='test' />);
 			const video = screen.getByTitle('Stream wrapper');
@@ -83,6 +84,7 @@ describe('wrappers', () => {
 	});
 
 	describe('IFrameWrapper component', () => {
+		afterEach(cleanup);
 		it('renders iframe element with default title', () => {
 			render(<IFrameWrapper src='test' />);
 			const iframe = screen.getByTitle('IFrame wrapper');
@@ -109,6 +111,7 @@ describe('wrappers', () => {
 	});
 
 	describe('VideoWrapper component', () => {
+		afterEach(cleanup);
 		const handleRemove = jest.fn((data) => data);
 		const user = userEvent.setup();
 
