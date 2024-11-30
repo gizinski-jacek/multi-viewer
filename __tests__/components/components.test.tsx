@@ -10,6 +10,30 @@ import Navbar from '@/components/Navbar';
 import stylesNavbar from './Navbar.module.scss';
 import Playlist from '@/components/Playlist';
 import stylesPlaylist from './Navbar.module.scss';
+import Chat from '@/components/Chat';
+import stylesChat from './Chat.module.scss';
+import IFrameWrapper from '@/components/wrappers/IFrameWrapper';
+
+const capitalizeWords = jest.fn((string: string): string => {
+	return string
+		.split(' ')
+		.map((str) => str.charAt(0).toUpperCase() + str.slice(1))
+		.join(' ');
+});
+
+const createIFrameChatSource = jest.fn((host: Hosts, id: string): string => {
+	if (!host) throw new Error('Select video host');
+	const embed_domain = 'localhost';
+	if (!embed_domain) {
+		throw new Error('Environment setup error');
+	}
+	switch (host) {
+		case 'youtube':
+			return `https://www.youtube.com/live_chat?v=${id}&embed_domain=${embed_domain}`;
+		default:
+			throw new Error('Unsupported host or incorrect ID');
+	}
+});
 
 interface PropsNavbar {
 	addVideo: (host: Hosts, userInput: string) => void;
@@ -190,11 +214,56 @@ jest.mock('app/components/Playlist', () => {
 	return Playlist;
 });
 
-const capitalizeWords = jest.fn((string: string): string => {
-	return string
-		.split(' ')
-		.map((str) => str.charAt(0).toUpperCase() + str.slice(1))
-		.join(' ');
+interface PropsChat {
+	videoData: VideoData[];
+	activeChat: VideoData | null;
+	changeChat: (data: VideoData) => void;
+}
+
+jest.mock('app/components/Chat', () => {
+	const Chat = ({ videoData, activeChat, changeChat }: PropsChat) => {
+		return (
+			<div className={stylesChat.chat} data-testid='Chat'>
+				{videoData.filter((video) => video.livestreamChat).length !== 0 ? (
+					<>
+						<ul className={stylesChat['chat-list']}>
+							{videoData.map(
+								(video) =>
+									video.livestreamChat && (
+										<li
+											className={`btn p-0 px-1 text-nowrap overflow-hidden ${
+												activeChat?.id === video.id &&
+												activeChat?.host === video.host
+													? 'btn-primary'
+													: 'btn-secondary'
+											}`}
+											key={video.id}
+											onClick={() => changeChat(video)}
+											data-testid='Item'
+										>
+											{video.channelName}
+										</li>
+									)
+							)}
+						</ul>
+						<div className='flex-fill' data-testid='ActiveChat'>
+							{activeChat && (
+								<IFrameWrapper
+									src={createIFrameChatSource(activeChat.host, activeChat.id)}
+									title={`${activeChat.host} chat`}
+								/>
+							)}
+						</div>
+					</>
+				) : (
+					<div className='m-auto' data-testid='EmptyList'>
+						Add a video to see the chat
+					</div>
+				)}
+			</div>
+		);
+	};
+	return Chat;
 });
 
 describe('components', () => {
@@ -320,18 +389,7 @@ describe('components', () => {
 			render(<Playlist {...props} />);
 			const items = screen.getAllByTestId('Item');
 			expect(items[0].firstChild).toBeInTheDocument();
-			expect(items[0].firstChild).toHaveClass('video');
-			expect(items[0].firstChild!.firstChild).toHaveProperty(
-				'src',
-				props.playlist[0].thumbnailUrl
-			);
-			expect(items[1].firstChild!.firstChild).toHaveClass('placeholder');
-		});
-
-		it('renders passed playlist items', () => {
-			render(<Playlist {...props} />);
-			const items = screen.getAllByTestId('Item');
-			expect(items[0].firstChild).toBeInTheDocument();
+			expect(items[0].firstChild).toMatchSnapshot();
 			expect(items.length).toBe(2);
 			expect(items[0].firstChild).toHaveClass('video');
 			expect(items[0].firstChild!.firstChild).toHaveProperty(
@@ -349,6 +407,7 @@ describe('components', () => {
 			const moveUp = screen.getByTestId('MoveVidUp');
 			const moveDown = screen.getByTestId('MoveVidDown');
 			expect(remove).toBeInTheDocument();
+			expect(remove).toMatchSnapshot();
 			expect(remove).toHaveProperty('click');
 			expect(moveUp).toHaveProperty('disabled', true);
 			expect(moveDown).toHaveProperty('disabled', true);
@@ -362,7 +421,9 @@ describe('components', () => {
 			const moveUp = screen.getAllByTestId('MoveVidUp')[1];
 			const moveDown = screen.getAllByTestId('MoveVidDown')[1];
 			expect(moveUp).toBeInTheDocument();
+			expect(moveUp).toMatchSnapshot();
 			expect(moveDown).toBeInTheDocument();
+			expect(moveDown).toMatchSnapshot();
 			expect(moveUp).toHaveProperty('click');
 			expect(moveDown).toHaveProperty('click');
 			expect(moveUp).toHaveProperty('disabled', false);
@@ -371,6 +432,99 @@ describe('components', () => {
 			expect(props.reorderVideo).not.toHaveBeenCalled();
 			await user.click(moveUp);
 			expect(props.reorderVideo).toHaveBeenCalledWith(props.playlist[1], 0);
+		});
+	});
+
+	describe('Chat', () => {
+		afterEach(cleanup);
+		const props: PropsChat = {
+			videoData: [
+				{
+					channelId: 'UCkK2B6D3imy6EnpqfrYm-5A',
+					channelName: 'LoFi Tokyo',
+					host: 'youtube',
+					id: '7XXu_-eoxHo',
+					livestreamChat: true,
+					thumbnailUrl: 'https://i.ytimg.com/vi/7XXu_-eoxHo/default.jpg',
+					title: "Playlist80's Tokyo Vibes",
+				},
+				{
+					channelId: 'UCuS_-bvOCh4W5Sy11Uf4H5A',
+					channelName: 'The Japanese Town',
+					host: 'youtube',
+					id: 'XkPuZqiqN7k',
+					livestreamChat: true,
+					thumbnailUrl: null,
+					title: 'Nostalgic Lofi Hip Hop Beats',
+				},
+			],
+			activeChat: {
+				channelId: 'UCkK2B6D3imy6EnpqfrYm-5A',
+				channelName: 'LoFi Tokyo',
+				host: 'youtube',
+				id: '7XXu_-eoxHo',
+				livestreamChat: true,
+				thumbnailUrl: 'https://i.ytimg.com/vi/7XXu_-eoxHo/default.jpg',
+				title: "Playlist80's Tokyo Vibes",
+			},
+			changeChat: jest.fn((data: VideoData) => data),
+		};
+		const user = userEvent.setup();
+
+		it('renders visible Chat component', () => {
+			render(<Chat {...props} />);
+			const chat = screen.getByTestId('Chat');
+			expect(chat).toBeInTheDocument();
+			expect(chat).toMatchSnapshot();
+			expect(chat).toHaveClass('chat');
+			expect(chat.firstChild).toBeInTheDocument();
+			expect(chat.firstChild).toHaveClass('chat-list');
+		});
+
+		it('on element click triggers changeChat function', async () => {
+			render(<Chat {...props} />);
+			const items = screen.getAllByTestId('Item');
+			expect(items[0]).toBeInTheDocument();
+			expect(items[0]).toMatchSnapshot();
+			expect(items.length).toBe(2);
+			expect(items[0]).toHaveProperty('click');
+			await user.click(items[0]);
+			expect(props.changeChat).toHaveBeenCalledWith(props.videoData[0]);
+		});
+
+		it('renders active chat', () => {
+			render(<Chat {...props} />);
+			const activeChat = screen.getByTestId('ActiveChat');
+			expect(activeChat).toBeInTheDocument();
+			expect(activeChat).toMatchSnapshot();
+			expect(activeChat.firstChild).toHaveProperty(
+				'src',
+				createIFrameChatSource(props.activeChat!.host, props.activeChat!.id)
+			);
+		});
+
+		it('renders alternative element when passing video list with no livestreamChat', () => {
+			render(
+				<Chat
+					{...props}
+					videoData={[
+						{
+							channelId: 'UCkK2B6D3imy6EnpqfrYm-5A',
+							channelName: 'LoFi Tokyo',
+							host: 'youtube',
+							id: '7XXu_-eoxHo',
+							livestreamChat: false,
+							thumbnailUrl: 'https://i.ytimg.com/vi/7XXu_-eoxHo/default.jpg',
+							title: "Playlist80's Tokyo Vibes",
+						},
+					]}
+				/>
+			);
+			const emptyList = screen.getByTestId('EmptyList');
+			expect(emptyList).toBeInTheDocument();
+			expect(emptyList).toMatchSnapshot();
+			expect(emptyList).toHaveTextContent('Add a video to see the chat');
+			expect(emptyList.children.length).toBe(0);
 		});
 	});
 });

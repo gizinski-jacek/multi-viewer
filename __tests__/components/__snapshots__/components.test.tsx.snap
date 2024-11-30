@@ -1,5 +1,80 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`components Chat on element click triggers changeChat function 1`] = `
+<li
+  class="btn p-0 px-1 text-nowrap overflow-hidden btn-primary"
+  data-testid="Item"
+>
+  LoFi Tokyo
+</li>
+`;
+
+exports[`components Chat renders active chat 1`] = `
+<div
+  class="flex-fill"
+  data-testid="ActiveChat"
+>
+  <iframe
+    allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowfullscreen=""
+    height="100%"
+    referrerpolicy="strict-origin-when-cross-origin"
+    sandbox="allow-modals allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-storage-access-by-user-activation"
+    src="https://www.youtube.com/live_chat?v=7XXu_-eoxHo&embed_domain=localhost"
+    title="youtube chat"
+    width="100%"
+  />
+</div>
+`;
+
+exports[`components Chat renders alternative element when passing video list with no livestreamChat 1`] = `
+<div
+  class="m-auto"
+  data-testid="EmptyList"
+>
+  Add a video to see the chat
+</div>
+`;
+
+exports[`components Chat renders visible Chat component 1`] = `
+<div
+  class="chat"
+  data-testid="Chat"
+>
+  <ul
+    class="chat-list"
+  >
+    <li
+      class="btn p-0 px-1 text-nowrap overflow-hidden btn-primary"
+      data-testid="Item"
+    >
+      LoFi Tokyo
+    </li>
+    <li
+      class="btn p-0 px-1 text-nowrap overflow-hidden btn-secondary"
+      data-testid="Item"
+    >
+      The Japanese Town
+    </li>
+  </ul>
+  <div
+    class="flex-fill"
+    data-testid="ActiveChat"
+  >
+    <iframe
+      allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen=""
+      height="100%"
+      referrerpolicy="strict-origin-when-cross-origin"
+      sandbox="allow-modals allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-storage-access-by-user-activation"
+      src="https://www.youtube.com/live_chat?v=7XXu_-eoxHo&embed_domain=localhost"
+      title="youtube chat"
+      width="100%"
+    />
+  </div>
+</div>
+`;
+
 exports[`components Navbar properly calls addVideo prop only when input and select field values are not null 1`] = `
 <button
   class="btn btn-primary py-0 px-2 fw-bold text-uppercase"
@@ -196,6 +271,53 @@ exports[`components Navbar renders input field and select with options elements 
 />
 `;
 
+exports[`components Playlist remove function returns video to be removed, reorder buttons are disabled 1`] = `
+<button
+  class="btn btn-danger rounded-0 p-0"
+  data-testid="RemoveVid"
+  typeof="button"
+/>
+`;
+
+exports[`components Playlist renders items from playlist prop 1`] = `
+<div
+  class="video"
+>
+  <img
+    alt="Playlist80's Tokyo Vibes thumbnail"
+    height="90"
+    src="https://i.ytimg.com/vi/7XXu_-eoxHo/default.jpg"
+    width="130"
+  />
+  <p
+    class="flex-grow-1 m-0"
+    data-testid="title"
+  >
+    Playlist80's Tokyo Vibes
+  </p>
+  <div
+    class="d-flex flex-column justify-content-between"
+  >
+    <button
+      class="btn btn-danger rounded-0 p-0"
+      data-testid="RemoveVid"
+      typeof="button"
+    />
+    <button
+      class="btn btn-warning rounded-0 p-0"
+      data-testid="MoveVidUp"
+      disabled=""
+      typeof="button"
+    />
+    <button
+      class="btn btn-warning rounded-0 p-0"
+      data-testid="MoveVidDown"
+      typeof="button"
+    />
+  </div>
+</div>
+`;
+
 exports[`components Playlist renders visible Playlist component 1`] = `
 <div
   class="playlist visible"
@@ -283,4 +405,21 @@ exports[`components Playlist renders visible Playlist component 1`] = `
     </li>
   </ul>
 </div>
+`;
+
+exports[`components Playlist reorder function returns video and its new index on the list 1`] = `
+<button
+  class="btn btn-warning rounded-0 p-0"
+  data-testid="MoveVidUp"
+  typeof="button"
+/>
+`;
+
+exports[`components Playlist reorder function returns video and its new index on the list 2`] = `
+<button
+  class="btn btn-warning rounded-0 p-0"
+  data-testid="MoveVidDown"
+  disabled=""
+  typeof="button"
+/>
 `;
