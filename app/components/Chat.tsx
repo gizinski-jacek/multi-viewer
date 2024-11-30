@@ -12,7 +12,7 @@ interface Props {
 export default function Chat({ videoData, activeChat, changeChat }: Props) {
 	return (
 		<div className={styles.chat}>
-			{videoData.length ? (
+			{videoData.filter((video) => video.livestreamChat).length !== 0 ? (
 				<>
 					<ul className={styles['chat-list']}>
 						{videoData.map(
