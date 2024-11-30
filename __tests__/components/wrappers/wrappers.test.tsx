@@ -10,12 +10,7 @@ import VideoWrapper from '@/components/wrappers/VideoWrapper';
 import { Hosts, VideoData } from '@/libs/types';
 import stylesVideoWrapper from './VideoWrapper.module.scss';
 
-interface Props {
-	video: VideoData;
-	removeVideo: (video: VideoData) => void;
-}
-
-export function createIFrameVideoSource(host: Hosts, id: string): string {
+const createIFrameVideoSource = jest.fn((host: Hosts, id: string): string => {
 	if (!host) throw new Error('Select video host');
 	switch (host) {
 		case 'youtube':
@@ -23,6 +18,11 @@ export function createIFrameVideoSource(host: Hosts, id: string): string {
 		default:
 			throw new Error('Unsupported host or incorrect ID');
 	}
+});
+
+interface Props {
+	video: VideoData;
+	removeVideo: (video: VideoData) => void;
 }
 
 jest.mock('app/components/wrappers/VideoWrapper', () => {
@@ -38,7 +38,7 @@ jest.mock('app/components/wrappers/VideoWrapper', () => {
 				<HLSWrapper url={video.id} />
 			) : (
 				<IFrameWrapper
-					src={video.id}
+					src={createIFrameVideoSource(video.host, video.id)}
 					title={video.host && `${video.host} video player`}
 				/>
 			)}
@@ -123,7 +123,7 @@ describe('wrappers', () => {
 			expect(video).toHaveClass('video');
 			expect(video.lastChild).toHaveProperty(
 				'src',
-				'http://localhost/' + videoData.id
+				createIFrameVideoSource(videoData.host, videoData.id)
 			);
 		});
 
@@ -147,7 +147,7 @@ describe('wrappers', () => {
 			expect(video.firstChild).toHaveClass('remove-video');
 			expect(video.lastChild).toHaveProperty(
 				'src',
-				'http://localhost/' + videoData.id
+				createIFrameVideoSource(videoData.host, videoData.id)
 			);
 			const removeVideo = screen.getByTestId('remove-video');
 			expect(removeVideo).toHaveProperty('click');
