@@ -2,15 +2,16 @@
  * @jest-environment jsdom
  */
 
-import { render, screen } from '@testing-library/react';
-import Navbar from '@/components/Navbar';
-import Playlist from '@/components/Playlist';
-import { hostList, Hosts } from '@/libs/types';
-import stylesNavbar from './Navbar.module.scss';
+import { cleanup, render, screen } from '@testing-library/react';
 import { useState } from 'react';
 import userEvent from '@testing-library/user-event';
+import { hostList, Hosts, VideoData } from '@/libs/types';
+import Navbar from '@/components/Navbar';
+import stylesNavbar from './Navbar.module.scss';
+import Playlist from '@/components/Playlist';
+import stylesPlaylist from './Navbar.module.scss';
 
-interface Props {
+interface PropsNavbar {
 	addVideo: (host: Hosts, userInput: string) => void;
 	redirect: () => void;
 	toggleChat: (host: string, userInput: string) => void;
@@ -24,7 +25,7 @@ interface Props {
 }
 
 jest.mock('app/components/Navbar', () => {
-	const Navbar = ({ addVideo, showNavbar }: Props) => {
+	const Navbar = ({ addVideo, showNavbar }: PropsNavbar) => {
 		const [host, setHost] = useState<Hosts>('');
 		const [userInput, setUserInput] = useState<string>('');
 
@@ -114,6 +115,81 @@ jest.mock('app/components/Navbar', () => {
 	return Navbar;
 });
 
+interface PropsPlaylist {
+	navbarVisible: boolean;
+	playlist: VideoData[];
+	removeVideo: (video: VideoData) => void;
+	reorderVideo: (video: VideoData, index: number) => void;
+}
+
+jest.mock('app/components/Playlist', () => {
+	const Playlist = ({
+		navbarVisible,
+		playlist,
+		removeVideo,
+		reorderVideo,
+	}: PropsPlaylist) => {
+		return (
+			<div
+				className={`${stylesPlaylist.playlist} ${
+					navbarVisible ? stylesPlaylist.visible : stylesPlaylist.hidden
+				}`}
+				data-testid='Playlist'
+			>
+				<ul className={stylesPlaylist.container}>
+					{playlist.map((video, index) => (
+						<li key={video.id} data-testid='Item'>
+							<div className={stylesPlaylist.video}>
+								{video.thumbnailUrl ? (
+									// eslint-disable-next-line @next/next/no-img-element
+									<img
+										src={video.thumbnailUrl}
+										width={130}
+										height={90}
+										alt={`${video.title} thumbnail` || 'Video thumbnail'}
+									/>
+								) : (
+									<div
+										className={`${stylesPlaylist.placeholder} position-relative`}
+									/>
+								)}
+								<p className='flex-grow-1 m-0' data-testid='title'>
+									{video.title}
+								</p>
+								<div className='d-flex flex-column justify-content-between'>
+									<button
+										className='btn btn-danger rounded-0 p-0'
+										typeof='button'
+										onClick={() => removeVideo(video)}
+										data-testid='RemoveVid'
+									></button>
+									<button
+										className='btn btn-warning rounded-0 p-0'
+										typeof='button'
+										onClick={() => reorderVideo(video, index - 1)}
+										disabled={index === 0 || playlist.length < 2}
+										data-testid='MoveVidUp'
+									></button>
+									<button
+										className='btn btn-warning rounded-0 p-0'
+										onClick={() => reorderVideo(video, index + 1)}
+										typeof='button'
+										disabled={
+											index === playlist.length - 1 || playlist.length < 2
+										}
+										data-testid='MoveVidDown'
+									></button>
+								</div>
+							</div>
+						</li>
+					))}
+				</ul>
+			</div>
+		);
+	};
+	return Playlist;
+});
+
 const capitalizeWords = jest.fn((string: string): string => {
 	return string
 		.split(' ')
@@ -123,7 +199,8 @@ const capitalizeWords = jest.fn((string: string): string => {
 
 describe('components', () => {
 	describe('Navbar', () => {
-		const props: Props = {
+		afterEach(cleanup);
+		const props: PropsNavbar = {
 			addVideo: jest.fn((host: Hosts, userInput: string) => {
 				return { host, userInput };
 			}),
@@ -198,11 +275,102 @@ describe('components', () => {
 	});
 
 	describe('Playlist', () => {
-		it('renders Playlist component', () => {
-			// render(<Playlist data-testid='Playlist' />);
-			// const playlist = screen.getByTestId('Playlist');
-			// expect(playlist).toBeInTheDocument();
-			// expect(playlist).toMatchSnapshot();
+		afterEach(cleanup);
+		const props: PropsPlaylist = {
+			navbarVisible: true,
+			playlist: [
+				{
+					channelId: 'UCkK2B6D3imy6EnpqfrYm-5A',
+					channelName: 'LoFi Tokyo',
+					host: 'youtube',
+					id: '7XXu_-eoxHo',
+					livestreamChat: false,
+					thumbnailUrl: 'https://i.ytimg.com/vi/7XXu_-eoxHo/default.jpg',
+					title: "Playlist80's Tokyo Vibes",
+				},
+				{
+					channelId: 'UCuS_-bvOCh4W5Sy11Uf4H5A',
+					channelName: 'The Japanese Town',
+					host: 'youtube',
+					id: 'XkPuZqiqN7k',
+					livestreamChat: false,
+					thumbnailUrl: null,
+					title: 'Nostalgic Lofi Hip Hop Beats',
+				},
+			],
+			removeVideo: jest.fn((video: VideoData) => video),
+			reorderVideo: jest.fn((video: VideoData, index: number) => {
+				return { video, index };
+			}),
+		};
+		const user = userEvent.setup();
+
+		it('renders visible Playlist component', () => {
+			render(<Playlist {...props} />);
+			const playlist = screen.getByTestId('Playlist');
+			expect(playlist).toHaveClass('playlist');
+			expect(playlist).toHaveClass('visible');
+			expect(playlist).toBeInTheDocument();
+			expect(playlist).toMatchSnapshot();
+			expect(playlist.firstChild).toBeInTheDocument();
+			expect(playlist.firstChild).toHaveClass('container');
+		});
+
+		it('renders items from playlist prop', () => {
+			render(<Playlist {...props} />);
+			const items = screen.getAllByTestId('Item');
+			expect(items[0].firstChild).toBeInTheDocument();
+			expect(items[0].firstChild).toHaveClass('video');
+			expect(items[0].firstChild!.firstChild).toHaveProperty(
+				'src',
+				props.playlist[0].thumbnailUrl
+			);
+			expect(items[1].firstChild!.firstChild).toHaveClass('placeholder');
+		});
+
+		it('renders passed playlist items', () => {
+			render(<Playlist {...props} />);
+			const items = screen.getAllByTestId('Item');
+			expect(items[0].firstChild).toBeInTheDocument();
+			expect(items.length).toBe(2);
+			expect(items[0].firstChild).toHaveClass('video');
+			expect(items[0].firstChild!.firstChild).toHaveProperty(
+				'src',
+				props.playlist[0].thumbnailUrl
+			);
+			expect(items[1].firstChild!.firstChild).toHaveClass('placeholder');
+			const paras = screen.getAllByTestId('title');
+			expect(paras[1]).toHaveTextContent(props.playlist[1].title);
+		});
+
+		it('remove function returns video to be removed, reorder buttons are disabled', async () => {
+			render(<Playlist {...props} playlist={[props.playlist[0]]} />);
+			const remove = screen.getByTestId('RemoveVid');
+			const moveUp = screen.getByTestId('MoveVidUp');
+			const moveDown = screen.getByTestId('MoveVidDown');
+			expect(remove).toBeInTheDocument();
+			expect(remove).toHaveProperty('click');
+			expect(moveUp).toHaveProperty('disabled', true);
+			expect(moveDown).toHaveProperty('disabled', true);
+			await user.click(remove);
+			expect(props.removeVideo).toHaveBeenCalledTimes(1);
+			expect(props.removeVideo).toHaveBeenCalledWith(props.playlist[0]);
+		});
+
+		it('reorder function returns video and its new index on the list', async () => {
+			render(<Playlist {...props} />);
+			const moveUp = screen.getAllByTestId('MoveVidUp')[1];
+			const moveDown = screen.getAllByTestId('MoveVidDown')[1];
+			expect(moveUp).toBeInTheDocument();
+			expect(moveDown).toBeInTheDocument();
+			expect(moveUp).toHaveProperty('click');
+			expect(moveDown).toHaveProperty('click');
+			expect(moveUp).toHaveProperty('disabled', false);
+			expect(moveDown).toHaveProperty('disabled', true);
+			await user.click(moveDown);
+			expect(props.reorderVideo).not.toHaveBeenCalled();
+			await user.click(moveUp);
+			expect(props.reorderVideo).toHaveBeenCalledWith(props.playlist[1], 0);
 		});
 	});
 });

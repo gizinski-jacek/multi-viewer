@@ -195,3 +195,92 @@ exports[`components Navbar renders input field and select with options elements 
   value=""
 />
 `;
+
+exports[`components Playlist renders visible Playlist component 1`] = `
+<div
+  class="playlist visible"
+  data-testid="Playlist"
+>
+  <ul
+    class="container"
+  >
+    <li
+      data-testid="Item"
+    >
+      <div
+        class="video"
+      >
+        <img
+          alt="Playlist80's Tokyo Vibes thumbnail"
+          height="90"
+          src="https://i.ytimg.com/vi/7XXu_-eoxHo/default.jpg"
+          width="130"
+        />
+        <p
+          class="flex-grow-1 m-0"
+          data-testid="title"
+        >
+          Playlist80's Tokyo Vibes
+        </p>
+        <div
+          class="d-flex flex-column justify-content-between"
+        >
+          <button
+            class="btn btn-danger rounded-0 p-0"
+            data-testid="RemoveVid"
+            typeof="button"
+          />
+          <button
+            class="btn btn-warning rounded-0 p-0"
+            data-testid="MoveVidUp"
+            disabled=""
+            typeof="button"
+          />
+          <button
+            class="btn btn-warning rounded-0 p-0"
+            data-testid="MoveVidDown"
+            typeof="button"
+          />
+        </div>
+      </div>
+    </li>
+    <li
+      data-testid="Item"
+    >
+      <div
+        class="video"
+      >
+        <div
+          class="placeholder position-relative"
+        />
+        <p
+          class="flex-grow-1 m-0"
+          data-testid="title"
+        >
+          Nostalgic Lofi Hip Hop Beats
+        </p>
+        <div
+          class="d-flex flex-column justify-content-between"
+        >
+          <button
+            class="btn btn-danger rounded-0 p-0"
+            data-testid="RemoveVid"
+            typeof="button"
+          />
+          <button
+            class="btn btn-warning rounded-0 p-0"
+            data-testid="MoveVidUp"
+            typeof="button"
+          />
+          <button
+            class="btn btn-warning rounded-0 p-0"
+            data-testid="MoveVidDown"
+            disabled=""
+            typeof="button"
+          />
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
+`;
