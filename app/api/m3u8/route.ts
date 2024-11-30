@@ -19,9 +19,9 @@ export async function GET(
 		const data: VideoData = {
 			host: 'm3u8',
 			id: id,
-			title: null,
-			channelId: null,
-			channelName: 'stream',
+			title: 'm3u8 stream',
+			channelId: 'm3u8 stream',
+			channelName: 'm3u8 stream',
 			livestreamChat: false,
 			thumbnailUrl: null,
 		};

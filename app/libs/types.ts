@@ -24,8 +24,8 @@ export type Hosts =
 export interface VideoData {
 	host: Hosts;
 	id: string;
-	title: string | null;
-	channelId: string | null;
+	title: string;
+	channelId: string;
 	channelName: string;
 	livestreamChat: boolean;
 	thumbnailUrl: string | null;
