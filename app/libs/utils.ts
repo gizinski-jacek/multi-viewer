@@ -59,6 +59,8 @@ export function extractVideoId(
 		case 'dailymotion-playlist':
 		case 'vimeo':
 			return str.slice(str.lastIndexOf('/') + 1);
+		case 'm3u8':
+			return str;
 		default:
 			break;
 	}
@@ -73,7 +75,7 @@ export async function getVideoData(
 			throw new Error('Select video host');
 		}
 		if (!id) {
-			throw new Error('Provide video link or id');
+			throw new Error('Provide video link or Id');
 		}
 		const res: AxiosResponse<VideoData> = await axios.get(
 			`/api/${host}?id=${id}`,
@@ -110,7 +112,7 @@ export function createIFrameVideoSource(host: Hosts, id: string): string {
 		case 'vimeo':
 			return `https://player.vimeo.com/video/${id}`;
 		default:
-			throw new Error('Unsupported host or incorrect ID');
+			throw new Error('Unsupported host or incorrect Id');
 	}
 }
 
@@ -131,7 +133,7 @@ export function createIFrameChatSource(host: Hosts, id: string): string {
 		case 'twitch-vod':
 			return `https://www.twitch.tv/embed/${id}/chat?parent=${embed_domain}`;
 		default:
-			throw new Error('Unsupported host or incorrect ID');
+			throw new Error('Unsupported host or incorrect Id');
 	}
 }
 
