@@ -38,6 +38,9 @@ export function extractVideoId(
 			if (idYTP.includes('?si=')) {
 				idYTP = idYTP.slice(0, idYTP.indexOf('?si='));
 			}
+			if (idYTP.includes('&si=')) {
+				idYTP = idYTP.slice(0, idYTP.indexOf('&si='));
+			}
 			if (idYTP.includes('?list=')) {
 				idYTP = idYTP.slice(idYTP.indexOf('?list=') + 6);
 			}
@@ -88,7 +91,8 @@ export async function getVideoData(
 }
 
 export function createIFrameVideoSource(host: Hosts, id: string): string {
-	if (!host) throw new Error('Select video host');
+	if (!host) return '';
+	if (!id) return '';
 	const embed_domain =
 		process.env.NEXT_PUBLIC_NODE_ENV === 'production'
 			? process.env.NEXT_PUBLIC_EMBED_DOMAIN
@@ -112,12 +116,13 @@ export function createIFrameVideoSource(host: Hosts, id: string): string {
 		case 'vimeo':
 			return `https://player.vimeo.com/video/${id}`;
 		default:
-			throw new Error('Unsupported host or incorrect Id');
+			return '';
 	}
 }
 
 export function createIFrameChatSource(host: Hosts, id: string): string {
-	if (!host) throw new Error('Select video host');
+	if (!host) return '';
+	if (!id) return '';
 	const embed_domain =
 		process.env.NEXT_PUBLIC_NODE_ENV === 'production'
 			? process.env.NEXT_PUBLIC_EMBED_DOMAIN
@@ -133,7 +138,7 @@ export function createIFrameChatSource(host: Hosts, id: string): string {
 		case 'twitch-vod':
 			return `https://www.twitch.tv/embed/${id}/chat?parent=${embed_domain}`;
 		default:
-			throw new Error('Unsupported host or incorrect Id');
+			return '';
 	}
 }
 
@@ -188,6 +193,5 @@ export async function getDataFromParams(params: string): Promise<VideoData[]> {
 	const data = results
 		.filter((res) => res.status === 'fulfilled')
 		.map((res) => res.value);
-
 	return data;
 }
