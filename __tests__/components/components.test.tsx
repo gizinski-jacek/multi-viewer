@@ -15,21 +15,7 @@ import stylesPlaylist from './Navbar.module.scss';
 import Chat from '@/components/Chat';
 import stylesChat from './Chat.module.scss';
 import IFrameWrapper from '@/components/wrappers/IFrameWrapper';
-import { capitalizeWords } from '@/libs/utils';
-
-const createIFrameChatSource = jest.fn((host: Hosts, id: string): string => {
-	if (!host) throw new Error('Select video host');
-	const embed_domain = 'localhost';
-	if (!embed_domain) {
-		throw new Error('Environment setup error');
-	}
-	switch (host) {
-		case 'youtube':
-			return `https://www.youtube.com/live_chat?v=${id}&embed_domain=${embed_domain}`;
-		default:
-			throw new Error('Unsupported host or incorrect Id');
-	}
-});
+import { capitalizeWords, createIFrameChatSource } from '@/libs/utils';
 
 interface PropsNavbar {
 	addVideo: (host: Hosts, userInput: string) => void;
