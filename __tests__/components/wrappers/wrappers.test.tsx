@@ -2,23 +2,16 @@
  * @jest-environment jsdom
  */
 
+import { enableFetchMocks } from 'jest-fetch-mock';
+enableFetchMocks();
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import HLSWrapper from '@/components/wrappers/HLSWrapper';
 import IFrameWrapper from '@/components/wrappers/IFrameWrapper';
 import VideoWrapper from '@/components/wrappers/VideoWrapper';
-import { Hosts, VideoData } from '@/libs/types';
+import { VideoData } from '@/libs/types';
 import stylesVideoWrapper from './VideoWrapper.module.scss';
-
-const createIFrameVideoSource = jest.fn((host: Hosts, id: string): string => {
-	if (!host) throw new Error('Select video host');
-	switch (host) {
-		case 'youtube':
-			return `https://www.youtube-nocookie.com/embed/${id}`;
-		default:
-			throw new Error('Unsupported host or incorrect Id');
-	}
-});
+import { createIFrameVideoSource } from '@/libs/utils';
 
 interface Props {
 	video: VideoData;
