@@ -11,7 +11,7 @@ export async function GET(
 		const id = searchParams.get('id');
 		if (!id)
 			return NextResponse.json(
-				{ error: 'Provide video link or id' },
+				{ error: 'Provide video link or Id' },
 				{ status: 400 }
 			);
 		const fields = ['id', 'name', 'owner.id', 'owner.username'];

@@ -102,7 +102,7 @@ export default function Navbar({
 						value={userInput}
 						onChange={handleUserInputChange}
 						onKeyDown={handleInputEnterKey}
-						placeholder={host === 'm3u8' ? 'm3u8 link' : 'Link or id'}
+						placeholder={host === 'm3u8' ? 'm3u8 link' : 'Link or Id'}
 					/>
 				</fieldset>
 				<button
