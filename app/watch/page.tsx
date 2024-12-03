@@ -42,7 +42,7 @@ export default function App() {
 	async function handleAddVideo(host: Hosts, userInput: string) {
 		try {
 			if (!userInput) {
-				setError('Provide video link or id');
+				setError('Provide video link or Id');
 				return;
 			}
 			if (!host) {
@@ -51,7 +51,7 @@ export default function App() {
 			}
 			if (fetching) return;
 			dismissError();
-			const id = host === 'm3u8' ? userInput : extractVideoId(host, userInput);
+			const id = extractVideoId(host, userInput);
 			if (!id) {
 				setError('Unsupported host or incorrect Id');
 				return;
