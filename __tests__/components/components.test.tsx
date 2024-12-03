@@ -2,6 +2,8 @@
  * @jest-environment jsdom
  */
 
+import { enableFetchMocks } from 'jest-fetch-mock';
+enableFetchMocks();
 import { cleanup, render, screen } from '@testing-library/react';
 import { useState } from 'react';
 import userEvent from '@testing-library/user-event';
@@ -13,13 +15,7 @@ import stylesPlaylist from './Navbar.module.scss';
 import Chat from '@/components/Chat';
 import stylesChat from './Chat.module.scss';
 import IFrameWrapper from '@/components/wrappers/IFrameWrapper';
-
-const capitalizeWords = jest.fn((string: string): string => {
-	return string
-		.split(' ')
-		.map((str) => str.charAt(0).toUpperCase() + str.slice(1))
-		.join(' ');
-});
+import { capitalizeWords } from '@/libs/utils';
 
 const createIFrameChatSource = jest.fn((host: Hosts, id: string): string => {
 	if (!host) throw new Error('Select video host');
@@ -31,7 +27,7 @@ const createIFrameChatSource = jest.fn((host: Hosts, id: string): string => {
 		case 'youtube':
 			return `https://www.youtube.com/live_chat?v=${id}&embed_domain=${embed_domain}`;
 		default:
-			throw new Error('Unsupported host or incorrect ID');
+			throw new Error('Unsupported host or incorrect Id');
 	}
 });
 
@@ -112,7 +108,7 @@ jest.mock('app/components/Navbar', () => {
 					</fieldset>
 					<fieldset>
 						<label className='d-none text-capitalize' htmlFor='userInput'>
-							Link or id
+							Link or Id
 						</label>
 						<input
 							className='px-1'
@@ -122,7 +118,7 @@ jest.mock('app/components/Navbar', () => {
 							value={userInput}
 							onChange={handleUserInputChange}
 							onKeyDown={handleInputEnterKey}
-							placeholder={host === 'm3u8' ? 'm3u8 link' : 'Link or id'}
+							placeholder={host === 'm3u8' ? 'm3u8 link' : 'Link or Id'}
 							data-testid='userInput'
 						/>
 					</fieldset>
@@ -287,12 +283,18 @@ describe('components', () => {
 		};
 		const user = userEvent.setup();
 
-		it('renders Navbar component with passed props', () => {
+		it('renders Navbar component with passed props and "navbar" class', () => {
 			render(<Navbar {...props} />);
 			const navbar = screen.getByTestId('Navbar');
 			expect(navbar).toBeInTheDocument();
 			expect(navbar).toMatchSnapshot();
 			expect(navbar).toHaveClass('navbar');
+		});
+
+		it('renders Navbar with "navbar-hidden" class', () => {
+			render(<Navbar {...props} showNavbar={false} />);
+			const navbar = screen.getByTestId('Navbar');
+			expect(navbar).toHaveClass('navbar-hidden');
 		});
 
 		it('renders input field and select with options elements matching hostList, properly changes select and input values', async () => {
@@ -374,7 +376,7 @@ describe('components', () => {
 		};
 		const user = userEvent.setup();
 
-		it('renders visible Playlist component', () => {
+		it('renders Playlist component with "visible" class', () => {
 			render(<Playlist {...props} />);
 			const playlist = screen.getByTestId('Playlist');
 			expect(playlist).toHaveClass('playlist');
@@ -383,6 +385,12 @@ describe('components', () => {
 			expect(playlist).toMatchSnapshot();
 			expect(playlist.firstChild).toBeInTheDocument();
 			expect(playlist.firstChild).toHaveClass('container');
+		});
+
+		it('renders Playlist component with "hidden" class', () => {
+			render(<Playlist {...props} navbarVisible={false} />);
+			const playlist = screen.getByTestId('Playlist');
+			expect(playlist).toHaveClass('hidden');
 		});
 
 		it('renders items from playlist prop', () => {

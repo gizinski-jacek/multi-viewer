@@ -83,7 +83,7 @@ exports[`components Navbar properly calls addVideo prop only when input and sele
 />
 `;
 
-exports[`components Navbar renders Navbar component with passed props 1`] = `
+exports[`components Navbar renders Navbar component with passed props and "navbar" class 1`] = `
 <nav
   class="navbar"
   data-testid="Navbar"
@@ -165,14 +165,14 @@ exports[`components Navbar renders Navbar component with passed props 1`] = `
         class="d-none text-capitalize"
         for="userInput"
       >
-        Link or id
+        Link or Id
       </label>
       <input
         class="px-1"
         data-testid="userInput"
         id="userInput"
         name="userInput"
-        placeholder="Link or id"
+        placeholder="Link or Id"
         type="text"
         value=""
       />
@@ -265,7 +265,7 @@ exports[`components Navbar renders input field and select with options elements 
   data-testid="userInput"
   id="userInput"
   name="userInput"
-  placeholder="Link or id"
+  placeholder="Link or Id"
   type="text"
   value=""
 />
@@ -279,46 +279,7 @@ exports[`components Playlist remove function returns video to be removed, reorde
 />
 `;
 
-exports[`components Playlist renders items from playlist prop 1`] = `
-<div
-  class="video"
->
-  <img
-    alt="Playlist80's Tokyo Vibes thumbnail"
-    height="90"
-    src="https://i.ytimg.com/vi/7XXu_-eoxHo/default.jpg"
-    width="130"
-  />
-  <p
-    class="flex-grow-1 m-0"
-    data-testid="title"
-  >
-    Playlist80's Tokyo Vibes
-  </p>
-  <div
-    class="d-flex flex-column justify-content-between"
-  >
-    <button
-      class="btn btn-danger rounded-0 p-0"
-      data-testid="RemoveVid"
-      typeof="button"
-    />
-    <button
-      class="btn btn-warning rounded-0 p-0"
-      data-testid="MoveVidUp"
-      disabled=""
-      typeof="button"
-    />
-    <button
-      class="btn btn-warning rounded-0 p-0"
-      data-testid="MoveVidDown"
-      typeof="button"
-    />
-  </div>
-</div>
-`;
-
-exports[`components Playlist renders visible Playlist component 1`] = `
+exports[`components Playlist renders Playlist component with "visible" class 1`] = `
 <div
   class="playlist visible"
   data-testid="Playlist"
@@ -404,6 +365,45 @@ exports[`components Playlist renders visible Playlist component 1`] = `
       </div>
     </li>
   </ul>
+</div>
+`;
+
+exports[`components Playlist renders items from playlist prop 1`] = `
+<div
+  class="video"
+>
+  <img
+    alt="Playlist80's Tokyo Vibes thumbnail"
+    height="90"
+    src="https://i.ytimg.com/vi/7XXu_-eoxHo/default.jpg"
+    width="130"
+  />
+  <p
+    class="flex-grow-1 m-0"
+    data-testid="title"
+  >
+    Playlist80's Tokyo Vibes
+  </p>
+  <div
+    class="d-flex flex-column justify-content-between"
+  >
+    <button
+      class="btn btn-danger rounded-0 p-0"
+      data-testid="RemoveVid"
+      typeof="button"
+    />
+    <button
+      class="btn btn-warning rounded-0 p-0"
+      data-testid="MoveVidUp"
+      disabled=""
+      typeof="button"
+    />
+    <button
+      class="btn btn-warning rounded-0 p-0"
+      data-testid="MoveVidDown"
+      typeof="button"
+    />
+  </div>
 </div>
 `;
 
