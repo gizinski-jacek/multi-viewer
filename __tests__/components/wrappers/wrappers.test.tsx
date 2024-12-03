@@ -16,7 +16,7 @@ const createIFrameVideoSource = jest.fn((host: Hosts, id: string): string => {
 		case 'youtube':
 			return `https://www.youtube-nocookie.com/embed/${id}`;
 		default:
-			throw new Error('Unsupported host or incorrect ID');
+			throw new Error('Unsupported host or incorrect Id');
 	}
 });
 
