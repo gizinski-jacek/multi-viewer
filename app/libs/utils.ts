@@ -142,9 +142,7 @@ export function createIFrameChatSource(host: Hosts, id: string): string {
 	}
 }
 
-export function formatFetchError(error: unknown): NextResponse<{
-	error: string;
-}> {
+export function formatFetchError(error: unknown): NextResponse {
 	if (error instanceof AxiosError) {
 		return NextResponse.json(
 			{ error: error.response?.data.error || 'Unknown server error' },
@@ -175,23 +173,27 @@ export function createURLParams(data: VideoData[]): string | undefined {
 }
 
 export async function getDataFromParams(params: string): Promise<VideoData[]> {
-	const array = decodeURIComponent(params).split('&');
-	const results = (await Promise.allSettled(
-		array.map(
-			(param) =>
-				new Promise(async (resolve, reject) => {
-					try {
-						const str = param.split('+');
-						const data = await getVideoData(str[0] as Hosts, str[1]);
-						resolve(data);
-					} catch (error: any) {
-						reject(formatFetchError(error));
-					}
-				})
-		)
-	)) as { status: 'fulfilled' | 'rejected'; value: VideoData }[];
-	const data = results
-		.filter((res) => res.status === 'fulfilled')
-		.map((res) => res.value);
-	return data;
+	try {
+		const array = decodeURIComponent(params).split('&');
+		const results = (await Promise.allSettled(
+			array.map(
+				(param) =>
+					new Promise(async (resolve, reject) => {
+						try {
+							const str = param.split('+');
+							const data = await getVideoData(str[0] as Hosts, str[1]);
+							resolve(data);
+						} catch (error: unknown) {
+							reject(formatFetchError(error));
+						}
+					})
+			)
+		)) as { status: 'fulfilled' | 'rejected'; value: VideoData }[];
+		const data = results
+			.filter((res) => res.status === 'fulfilled')
+			.map((res) => res.value);
+		return data;
+	} catch (error: unknown) {
+		throw formatFetchError(error);
+	}
 }
