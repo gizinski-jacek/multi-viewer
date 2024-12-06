@@ -5,13 +5,13 @@ import { CSSProperties, useCallback, useEffect, useState } from 'react';
 import {
 	createURLParams,
 	extractVideoId,
+	formatFetchError,
 	getDataFromParams,
 	getVideoData,
 } from '@/libs/utils';
 import Navbar from '@/components/Navbar';
 import { Hosts, VideoData } from '@/libs/types';
 import Loading from '@/components/Loading';
-import { NextResponse } from 'next/server';
 import { useSearchParams } from 'next/navigation';
 import Chat from '@/components/Chat';
 import Playlist from '@/components/Playlist';
@@ -33,9 +33,14 @@ export default function App() {
 
 	useEffect(() => {
 		(async () => {
-			if (!videoListParams || videoListData.length > 0) return;
-			const videoData = await getDataFromParams(videoListParams);
-			setVideoListData(videoData);
+			try {
+				if (!videoListParams || videoListData.length > 0) return;
+				const videoData = await getDataFromParams(videoListParams);
+				setVideoListData(videoData);
+			} catch (error: unknown) {
+				setError(formatFetchError(error).statusText);
+				setFetching(false);
+			}
 		})();
 	}, [videoListParams, videoListData]);
 
@@ -75,18 +80,7 @@ export default function App() {
 			setVideoListData(newVideoDataState);
 			setFetching(false);
 		} catch (error: unknown) {
-			if (error instanceof NextResponse) {
-				setError(
-					error.status !== 500
-						? error.statusText ||
-								'Unknown fetching error. Make sure you selected correct source.'
-						: 'Unknown fetching error. Make sure you selected correct source.'
-				);
-			} else {
-				setError(
-					'Unknown fetching error. Make sure you selected correct source.'
-				);
-			}
+			setError(formatFetchError(error).statusText);
 			setFetching(false);
 		}
 	}
