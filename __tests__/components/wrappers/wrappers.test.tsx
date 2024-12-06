@@ -18,7 +18,7 @@ interface Props {
 	removeVideo: (video: VideoData) => void;
 }
 
-jest.mock('app/components/wrappers/VideoWrapper', () => {
+jest.mock('@/components/wrappers/VideoWrapper', () => {
 	const VideoWrapper = ({ video, removeVideo }: Props) => (
 		<div className={stylesVideoWrapper.video} data-testid='VideoWrapper'>
 			<button

@@ -100,8 +100,8 @@ const mockReturnData: VideoData = {
 	thumbnailUrl: 'https://i.ytimg.com/vi/T2sv8jXoP4s/default.jpg',
 };
 
-jest.mock('../../app/libs/utils', () => ({
-	...jest.requireActual('../../app/libs/utils'),
+jest.mock('@/libs/utils', () => ({
+	...jest.requireActual('@/libs/utils'),
 	getVideoData: jest.fn(
 		async (host: string, id: string): Promise<VideoData> => {
 			if (!host) {

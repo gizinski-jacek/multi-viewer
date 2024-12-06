@@ -30,7 +30,7 @@ interface PropsNavbar {
 	manualGridColSize: 'auto' | 1 | 2;
 }
 
-jest.mock('app/components/Navbar', () => {
+jest.mock('@/components/Navbar', () => {
 	const Navbar = ({ addVideo, showNavbar }: PropsNavbar) => {
 		const [host, setHost] = useState<Hosts>('');
 		const [userInput, setUserInput] = useState<string>('');
@@ -128,7 +128,7 @@ interface PropsPlaylist {
 	reorderVideo: (video: VideoData, index: number) => void;
 }
 
-jest.mock('app/components/Playlist', () => {
+jest.mock('@/components/Playlist', () => {
 	const Playlist = ({
 		navbarVisible,
 		playlist,
@@ -202,7 +202,7 @@ interface PropsChat {
 	changeChat: (data: VideoData) => void;
 }
 
-jest.mock('app/components/Chat', () => {
+jest.mock('@/components/Chat', () => {
 	const Chat = ({ videoData, activeChat, changeChat }: PropsChat) => {
 		return (
 			<div className={stylesChat.chat} data-testid='Chat'>
@@ -269,7 +269,7 @@ describe('components', () => {
 		};
 		const user = userEvent.setup();
 
-		it('renders Navbar component with passed props and "navbar" class', () => {
+		it('renders Navbar component with passed props and "navbar" class', async () => {
 			render(<Navbar {...props} />);
 			const navbar = screen.getByTestId('Navbar');
 			expect(navbar).toBeInTheDocument();
