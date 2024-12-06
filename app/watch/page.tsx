@@ -18,7 +18,7 @@ import Playlist from '@/components/Playlist';
 import VideoWrapper from '@/components/wrappers/VideoWrapper';
 
 export default function App() {
-	const videoListParams = useSearchParams().get('list');
+	const videoListParams = useSearchParams()?.get('list');
 	const [fetching, setFetching] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 	const [videoListData, setVideoListData] = useState<VideoData[]>([]);
