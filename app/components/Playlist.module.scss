@@ -1,5 +1,7 @@
 .playlist {
 	width: 100%;
+	height: -webkit-fit-content;
+	height: -moz-fit-content;
 	height: fit-content;
 	max-height: 400px;
 	overflow-y: auto;
@@ -9,6 +11,8 @@
 	background-color: var(--bs-dark);
 
 	.container {
+		height: -webkit-fit-content;
+		height: -moz-fit-content;
 		height: fit-content;
 		display: grid;
 		grid-template-columns: 1fr 1fr;
