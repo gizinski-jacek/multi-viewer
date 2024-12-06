@@ -10,12 +10,10 @@ import {
 	createIFrameVideoSource,
 	createURLParams,
 	extractVideoId,
-	formatFetchError,
 	getDataFromParams,
 	getVideoData,
 } from '@/libs/utils';
 import { Hosts, VideoData } from '@/libs/types';
-jest.mock('next/server');
 
 const mockData: { host: string; url: string; id: string }[] = [
 	{
@@ -214,13 +212,6 @@ describe('utils', () => {
 		);
 		expect(results[7]).toBe('');
 	});
-
-	// it('errors', () => {
-	// 	const error = new Error('err');
-	// 	const axiosError = new AxiosError('error');
-	// 	expect(formatFetchError(error)).toBe({});
-	// 	expect(formatFetchError(axiosError)).toBe({});
-	// });
 
 	it('creates correct URL params with mock data', () => {
 		const params = createURLParams([mockReturnData]);
