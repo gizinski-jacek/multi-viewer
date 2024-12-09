@@ -142,7 +142,9 @@ export function createIFrameChatSource(host: Hosts, id: string): string {
 	}
 }
 
-export function formatFetchError(error: unknown): NextResponse {
+export function formatFetchError(
+	error: unknown
+): NextResponse<{ error: string }> {
 	if (error instanceof AxiosError) {
 		return NextResponse.json(
 			{ error: error.response?.data.error || 'Unknown server error' },
