@@ -246,7 +246,7 @@ export default function Watch() {
 	}
 
 	return (
-		<div className={styles.app}>
+		<div className={styles.watch}>
 			<Navbar
 				addVideo={handleAddVideo}
 				redirect={handleRedirect}
