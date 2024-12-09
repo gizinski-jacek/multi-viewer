@@ -72,6 +72,7 @@ VIMEO_ACCESS_TOKEN
 ## Features
 
 - Support for different video/livestreaming sites
+- Adding videos by full URL of by Id
 - Integrated chat if supported by the original host
 - Playlist showing ordered list of videos and livestreams
   - Ability to reorder or remove each media
