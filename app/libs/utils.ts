@@ -38,6 +38,9 @@ export function extractVideoId(
 			if (idYTP.includes('?si=')) {
 				idYTP = idYTP.slice(0, idYTP.indexOf('?si='));
 			}
+			if (idYTP.includes('&si=')) {
+				idYTP = idYTP.slice(0, idYTP.indexOf('&si='));
+			}
 			if (idYTP.includes('?list=')) {
 				idYTP = idYTP.slice(idYTP.indexOf('?list=') + 6);
 			}
@@ -59,6 +62,8 @@ export function extractVideoId(
 		case 'dailymotion-playlist':
 		case 'vimeo':
 			return str.slice(str.lastIndexOf('/') + 1);
+		case 'm3u8':
+			return str;
 		default:
 			break;
 	}
@@ -73,7 +78,7 @@ export async function getVideoData(
 			throw new Error('Select video host');
 		}
 		if (!id) {
-			throw new Error('Provide video link or id');
+			throw new Error('Provide video link or Id');
 		}
 		const res: AxiosResponse<VideoData> = await axios.get(
 			`/api/${host}?id=${id}`,
@@ -86,7 +91,8 @@ export async function getVideoData(
 }
 
 export function createIFrameVideoSource(host: Hosts, id: string): string {
-	if (!host) throw new Error('Select video host');
+	if (!host) return '';
+	if (!id) return '';
 	const embed_domain =
 		process.env.NEXT_PUBLIC_NODE_ENV === 'production'
 			? process.env.NEXT_PUBLIC_EMBED_DOMAIN
@@ -110,12 +116,13 @@ export function createIFrameVideoSource(host: Hosts, id: string): string {
 		case 'vimeo':
 			return `https://player.vimeo.com/video/${id}`;
 		default:
-			throw new Error('Unsupported host or incorrect ID');
+			return '';
 	}
 }
 
 export function createIFrameChatSource(host: Hosts, id: string): string {
-	if (!host) throw new Error('Select video host');
+	if (!host) return '';
+	if (!id) return '';
 	const embed_domain =
 		process.env.NEXT_PUBLIC_NODE_ENV === 'production'
 			? process.env.NEXT_PUBLIC_EMBED_DOMAIN
@@ -131,13 +138,13 @@ export function createIFrameChatSource(host: Hosts, id: string): string {
 		case 'twitch-vod':
 			return `https://www.twitch.tv/embed/${id}/chat?parent=${embed_domain}`;
 		default:
-			throw new Error('Unsupported host or incorrect ID');
+			return '';
 	}
 }
 
-export function formatFetchError(error: unknown): NextResponse<{
-	error: string;
-}> {
+export function formatFetchError(
+	error: unknown
+): NextResponse<{ error: string }> {
 	if (error instanceof AxiosError) {
 		return NextResponse.json(
 			{ error: error.response?.data.error || 'Unknown server error' },
@@ -168,24 +175,27 @@ export function createURLParams(data: VideoData[]): string | undefined {
 }
 
 export async function getDataFromParams(params: string): Promise<VideoData[]> {
-	const array = decodeURIComponent(params).split('&');
-	const results = (await Promise.allSettled(
-		array.map(
-			(param) =>
-				new Promise(async (resolve, reject) => {
-					try {
-						const str = param.split('+');
-						const data = await getVideoData(str[0] as Hosts, str[1]);
-						resolve(data);
-					} catch (error: any) {
-						reject(formatFetchError(error));
-					}
-				})
-		)
-	)) as { status: 'fulfilled' | 'rejected'; value: VideoData }[];
-	const data = results
-		.filter((res) => res.status === 'fulfilled')
-		.map((res) => res.value);
-
-	return data;
+	try {
+		const array = decodeURIComponent(params).split('&');
+		const results = (await Promise.allSettled(
+			array.map(
+				(param) =>
+					new Promise(async (resolve, reject) => {
+						try {
+							const str = param.split('+');
+							const data = await getVideoData(str[0] as Hosts, str[1]);
+							resolve(data);
+						} catch (error: unknown) {
+							reject(formatFetchError(error));
+						}
+					})
+			)
+		)) as { status: 'fulfilled' | 'rejected'; value: VideoData }[];
+		const data = results
+			.filter((res) => res.status === 'fulfilled')
+			.map((res) => res.value);
+		return data;
+	} catch (error: unknown) {
+		throw formatFetchError(error);
+	}
 }

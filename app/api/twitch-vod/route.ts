@@ -1,5 +1,5 @@
-import { TwitchAuth, TwitchVOD, VideoData } from '@/app/libs/types';
-import { formatFetchError } from '@/app/libs/utils';
+import { TwitchAuth, TwitchVOD, VideoData } from '@/libs/types';
+import { formatFetchError } from '@/libs/utils';
 import axios, { AxiosResponse } from 'axios';
 import { NextResponse, type NextRequest } from 'next/server';
 import querystring from 'querystring';
@@ -21,7 +21,7 @@ export async function GET(
 		const id = searchParams.get('id');
 		if (!id)
 			return NextResponse.json(
-				{ error: 'Provide video link or id' },
+				{ error: 'Provide video link or Id' },
 				{ status: 400 }
 			);
 		const authQuery = querystring.stringify({

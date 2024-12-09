@@ -1,7 +1,7 @@
 import styles from './Navbar.module.scss';
 import { useState } from 'react';
-import { hostList, Hosts } from '../libs/types';
-import { capitalizeWords } from '../libs/utils';
+import { hostList, Hosts } from '@/libs/types';
+import { capitalizeWords } from '@/libs/utils';
 
 interface Props {
 	addVideo: (host: Hosts, userInput: string) => void;
@@ -102,7 +102,7 @@ export default function Navbar({
 						value={userInput}
 						onChange={handleUserInputChange}
 						onKeyDown={handleInputEnterKey}
-						placeholder={host === 'm3u8' ? 'm3u8 link' : 'Link or id'}
+						placeholder={host === 'm3u8' ? 'm3u8 link' : 'Link or Id'}
 					/>
 				</fieldset>
 				<button

@@ -51,6 +51,10 @@ li {
 	padding: 0;
 }
 
+svg {
+	display: block;
+}
+
 @media (prefers-color-scheme: dark) {
 	html {
 		color-scheme: dark;

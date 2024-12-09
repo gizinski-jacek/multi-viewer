@@ -1,4 +1,4 @@
-.app {
+.watch {
 	min-height: 100vh;
 	min-width: 360px;
 	display: flex;
@@ -35,7 +35,11 @@
 }
 
 .error {
+	width: -webkit-fit-content;
+	width: -moz-fit-content;
 	width: fit-content;
+	height: -webkit-fit-content;
+	height: -moz-fit-content;
 	height: fit-content;
 	margin: auto;
 	padding: 1rem;
@@ -68,7 +72,11 @@
 	grid-template-columns: 1fr;
 	grid-template-rows: 1fr;
 	max-width: 100%;
+	height: -webkit-fit-content;
+	height: -moz-fit-content;
 	height: fit-content;
+	max-height: -webkit-fit-content;
+	max-height: -moz-fit-content;
 	max-height: fit-content;
 }
 

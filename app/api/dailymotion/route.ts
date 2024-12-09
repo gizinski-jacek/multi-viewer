@@ -1,5 +1,5 @@
-import { DailymotionVideo, VideoData } from '@/app/libs/types';
-import { formatFetchError } from '@/app/libs/utils';
+import { DailymotionVideo, VideoData } from '@/libs/types';
+import { formatFetchError } from '@/libs/utils';
 import axios, { AxiosResponse } from 'axios';
 import { NextResponse, type NextRequest } from 'next/server';
 
@@ -11,7 +11,7 @@ export async function GET(
 		const id = searchParams.get('id');
 		if (!id)
 			return NextResponse.json(
-				{ error: 'Provide video link or id' },
+				{ error: 'Provide video link or Id' },
 				{ status: 400 }
 			);
 		const fields = ['id', 'title', 'owner.id', 'owner.username'];

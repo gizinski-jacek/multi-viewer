@@ -5,20 +5,20 @@ import { CSSProperties, useCallback, useEffect, useState } from 'react';
 import {
 	createURLParams,
 	extractVideoId,
+	formatFetchError,
 	getDataFromParams,
 	getVideoData,
-} from '../libs/utils';
-import Navbar from '../components/Navbar';
-import { Hosts, VideoData } from '../libs/types';
-import Loading from '../components/Loading';
-import { NextResponse } from 'next/server';
+} from '@/libs/utils';
+import Navbar from '@/components/Navbar';
+import { Hosts, VideoData } from '@/libs/types';
+import Loading from '@/components/Loading';
 import { useSearchParams } from 'next/navigation';
-import Chat from '../components/Chat';
-import Playlist from '../components/Playlist';
-import VideoWrapper from '../components/wrappers/VideoWrapper';
+import Chat from '@/components/Chat';
+import Playlist from '@/components/Playlist';
+import VideoWrapper from '@/components/wrappers/VideoWrapper';
 
-export default function App() {
-	const videoListParams = useSearchParams().get('list');
+export default function Watch() {
+	const videoListParams = useSearchParams()?.get('list');
 	const [fetching, setFetching] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 	const [videoListData, setVideoListData] = useState<VideoData[]>([]);
@@ -33,16 +33,21 @@ export default function App() {
 
 	useEffect(() => {
 		(async () => {
-			if (!videoListParams || videoListData.length > 0) return;
-			const videoData = await getDataFromParams(videoListParams);
-			setVideoListData(videoData);
+			try {
+				if (!videoListParams || videoListData.length > 0) return;
+				const videoData = await getDataFromParams(videoListParams);
+				setVideoListData(videoData);
+			} catch (error: unknown) {
+				setError(formatFetchError(error).statusText);
+				setFetching(false);
+			}
 		})();
 	}, [videoListParams, videoListData]);
 
 	async function handleAddVideo(host: Hosts, userInput: string) {
 		try {
 			if (!userInput) {
-				setError('Provide video link or id');
+				setError('Provide video link or Id');
 				return;
 			}
 			if (!host) {
@@ -50,8 +55,8 @@ export default function App() {
 				return;
 			}
 			if (fetching) return;
-			dismissError();
-			const id = host === 'm3u8' ? userInput : extractVideoId(host, userInput);
+			setError(null);
+			const id = extractVideoId(host, userInput);
 			if (!id) {
 				setError('Unsupported host or incorrect Id');
 				return;
@@ -75,21 +80,11 @@ export default function App() {
 			setVideoListData(newVideoDataState);
 			setFetching(false);
 		} catch (error: unknown) {
-			if (error instanceof NextResponse) {
-				setError(
-					error.status !== 500
-						? error.statusText ||
-								'Unknown fetching error. Make sure you selected correct source.'
-						: 'Unknown fetching error. Make sure you selected correct source.'
-				);
-			} else {
-				setError(
-					'Unknown fetching error. Make sure you selected correct source.'
-				);
-			}
+			setError(formatFetchError(error).statusText);
 			setFetching(false);
 		}
 	}
+
 	function handleRemoveVideo(video: VideoData) {
 		if (!video) {
 			setError('Error removing video');
@@ -112,9 +107,11 @@ export default function App() {
 	}
 
 	function handleReorderVideo(video: VideoData, targetIndex: number) {
-		// ToDo: Find reason why videos pushed down the list (higher index) by items moved
-		// ToDO: by user up the list (lower index) get re-rendered while others do not.
-		if (targetIndex === undefined || !video) return;
+		// ! Find reason why videos pushed down the list (higher index) by items moved
+		// ! up the list (lower index) get re-rendered while others do not.
+		if (videoListData.length < 2 || !video || targetIndex === undefined) {
+			return;
+		}
 		const newState = videoListData.filter((vid) =>
 			vid.id === video.id ? (vid.host === video.host ? false : true) : true
 		);
@@ -249,7 +246,7 @@ export default function App() {
 	}
 
 	return (
-		<div className={styles.app}>
+		<div className={styles.watch}>
 			<Navbar
 				addVideo={handleAddVideo}
 				redirect={handleRedirect}

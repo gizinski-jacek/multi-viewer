@@ -1,7 +1,7 @@
 import styles from './VideoWrapper.module.scss';
-import { VideoData } from '@/app/libs/types';
-import { IFrameWrapper } from './IFrameWrapper';
-import { createIFrameVideoSource } from '@/app/libs/utils';
+import { VideoData } from '@/libs/types';
+import IFrameWrapper from './IFrameWrapper';
+import { createIFrameVideoSource } from '@/libs/utils';
 import HLSWrapper from './HLSWrapper';
 
 interface Props {
@@ -12,8 +12,9 @@ interface Props {
 export default function VideoWrapper({ video, removeVideo }: Props) {
 	return (
 		<div className={styles.video}>
-			<div
+			<button
 				className={`${styles['remove-video']} btn btn-danger`}
+				type='button'
 				onClick={() => removeVideo(video)}
 			>
 				<svg
@@ -35,7 +36,7 @@ export default function VideoWrapper({ video, removeVideo }: Props) {
 						</g>
 					</g>
 				</svg>
-			</div>
+			</button>
 			{video.host === 'm3u8' ? (
 				<HLSWrapper url={video.id} />
 			) : (

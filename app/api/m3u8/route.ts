@@ -1,5 +1,5 @@
-import { VideoData } from '@/app/libs/types';
-import { formatFetchError } from '@/app/libs/utils';
+import { VideoData } from '@/libs/types';
+import { formatFetchError } from '@/libs/utils';
 import axios from 'axios';
 import { NextResponse, type NextRequest } from 'next/server';
 
@@ -11,7 +11,7 @@ export async function GET(
 		const id = searchParams.get('id');
 		if (!id)
 			return NextResponse.json(
-				{ error: 'Provide video link or id' },
+				{ error: 'Provide video link or Id' },
 				{ status: 400 }
 			);
 		// Checks whether the link is valid
@@ -19,9 +19,9 @@ export async function GET(
 		const data: VideoData = {
 			host: 'm3u8',
 			id: id,
-			title: null,
-			channelId: null,
-			channelName: 'stream',
+			title: 'm3u8 stream',
+			channelId: 'm3u8 stream',
+			channelName: 'm3u8 stream',
 			livestreamChat: false,
 			thumbnailUrl: null,
 		};

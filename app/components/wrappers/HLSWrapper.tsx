@@ -1,6 +1,4 @@
-import styles from './VideoWrapper.module.scss';
 import Hls from 'hls.js';
-import { VideoData } from '@/app/libs/types';
 import { useEffect, useRef } from 'react';
 
 interface Props {

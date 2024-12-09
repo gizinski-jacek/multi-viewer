@@ -1,7 +1,7 @@
 import styles from './Chat.module.scss';
-import { VideoData } from '../libs/types';
-import { createIFrameChatSource } from '../libs/utils';
-import { IFrameWrapper } from './wrappers/IFrameWrapper';
+import { VideoData } from '@/libs/types';
+import { createIFrameChatSource } from '@/libs/utils';
+import IFrameWrapper from './wrappers/IFrameWrapper';
 
 interface Props {
 	videoData: VideoData[];
@@ -12,7 +12,7 @@ interface Props {
 export default function Chat({ videoData, activeChat, changeChat }: Props) {
 	return (
 		<div className={styles.chat}>
-			{videoData.length ? (
+			{videoData.filter((video) => video.livestreamChat).length !== 0 ? (
 				<>
 					<ul className={styles['chat-list']}>
 						{videoData.map(
