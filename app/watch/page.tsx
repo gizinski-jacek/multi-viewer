@@ -55,7 +55,7 @@ export default function Watch() {
 				return;
 			}
 			if (fetching) return;
-			dismissError();
+			setError(null);
 			const id = extractVideoId(host, userInput);
 			if (!id) {
 				setError('Unsupported host or incorrect Id');
