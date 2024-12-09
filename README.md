@@ -67,14 +67,14 @@ TWITCH_CLIENT_SECRET
 VIMEO_ACCESS_TOKEN
 ```
 
-**NEXT_PUBLIC_EMBED_DOMAIN** is the URL of your app.
+**NEXT_PUBLIC_EMBED_DOMAIN** should be the full URL of your app.
 
 ## Features
 
-- Support for different video/livestream sites
-- Integrated chat if present
-- Playlist showing list videos/livestreams
-  - Ability to reorder or remove entirely
+- Support for different video/livestreaming sites
+- Integrated chat if supported by the original host
+- Playlist showing ordered list of videos and livestreams
+  - Ability to reorder or remove each media
 - Responsive and adjustable UI
 
 ## Status
