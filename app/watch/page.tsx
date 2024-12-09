@@ -17,7 +17,7 @@ import Chat from '@/components/Chat';
 import Playlist from '@/components/Playlist';
 import VideoWrapper from '@/components/wrappers/VideoWrapper';
 
-export default function App() {
+export default function Watch() {
 	const videoListParams = useSearchParams()?.get('list');
 	const [fetching, setFetching] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
