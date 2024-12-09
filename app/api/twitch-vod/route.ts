@@ -4,13 +4,15 @@ import axios, { AxiosResponse } from 'axios';
 import { NextResponse, type NextRequest } from 'next/server';
 import querystring from 'querystring';
 
-export async function GET(req: NextRequest): Promise<NextResponse<VideoData>> {
+export async function GET(
+	req: NextRequest
+): Promise<NextResponse<VideoData | { error: string }>> {
 	try {
 		if (!process.env.TWITCH_CLIENT_ID || !process.env.TWITCH_CLIENT_SECRET) {
 			console.error(
 				'Provide TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET env variables'
 			);
-			throw NextResponse.json(
+			return NextResponse.json(
 				{ error: 'Unknown server error' },
 				{ status: 500 }
 			);
@@ -18,7 +20,7 @@ export async function GET(req: NextRequest): Promise<NextResponse<VideoData>> {
 		const { searchParams } = new URL(req.url);
 		const id = searchParams.get('id');
 		if (!id)
-			throw NextResponse.json(
+			return NextResponse.json(
 				{ error: 'Provide video link or Id' },
 				{ status: 400 }
 			);
@@ -57,6 +59,6 @@ export async function GET(req: NextRequest): Promise<NextResponse<VideoData>> {
 		};
 		return NextResponse.json(data, { status: 200 });
 	} catch (error: unknown) {
-		throw formatFetchError(error);
+		return formatFetchError(error);
 	}
 }

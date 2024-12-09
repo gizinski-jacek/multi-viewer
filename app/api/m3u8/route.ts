@@ -3,12 +3,14 @@ import { formatFetchError } from '@/libs/utils';
 import axios from 'axios';
 import { NextResponse, type NextRequest } from 'next/server';
 
-export async function GET(req: NextRequest): Promise<NextResponse<VideoData>> {
+export async function GET(
+	req: NextRequest
+): Promise<NextResponse<VideoData | { error: string }>> {
 	try {
 		const { searchParams } = new URL(req.url);
 		const id = searchParams.get('id');
 		if (!id)
-			throw NextResponse.json(
+			return NextResponse.json(
 				{ error: 'Provide video link or Id' },
 				{ status: 400 }
 			);
@@ -25,6 +27,6 @@ export async function GET(req: NextRequest): Promise<NextResponse<VideoData>> {
 		};
 		return NextResponse.json(data, { status: 200 });
 	} catch (error: unknown) {
-		throw formatFetchError(error);
+		return formatFetchError(error);
 	}
 }
