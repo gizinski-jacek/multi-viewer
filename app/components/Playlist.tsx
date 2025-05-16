@@ -5,6 +5,8 @@ import { VideoData } from '@/libs/types';
 interface Props {
 	navbarVisible: boolean;
 	playlist: VideoData[];
+	closePlaylist: () => void;
+	clearPlaylist: () => void;
 	removeVideo: (video: VideoData) => void;
 	reorderVideo: (video: VideoData, index: number) => void;
 }
@@ -12,6 +14,8 @@ interface Props {
 export default function Playlist({
 	navbarVisible,
 	playlist,
+	closePlaylist,
+	clearPlaylist,
 	removeVideo,
 	reorderVideo,
 }: Props) {
@@ -21,6 +25,20 @@ export default function Playlist({
 				navbarVisible ? styles.visible : styles.hidden
 			}`}
 		>
+			<div className='mb-2 d-flex justify-content-between gap-3'>
+				<button
+					className='btn btn-danger flex-grow-1 py-0 px-1 fw-bold text-uppercase'
+					onClick={clearPlaylist}
+				>
+					Clear All
+				</button>
+				<button
+					className='btn btn-warning flex-grow-1 py-0 px-1 fw-bold text-uppercase'
+					onClick={closePlaylist}
+				>
+					Close
+				</button>
+			</div>
 			<ul className={styles.container}>
 				{playlist.map((video, index) => (
 					<li key={video.id}>
