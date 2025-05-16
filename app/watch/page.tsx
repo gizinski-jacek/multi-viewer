@@ -42,7 +42,7 @@ export default function Watch() {
 				setFetching(false);
 			}
 		})();
-	}, [videoListParams, videoListData]);
+	}, [videoListParams, videoListData, setVideoListData]);
 
 	async function handleAddVideo(host: Hosts, userInput: string) {
 		try {
@@ -226,6 +226,10 @@ export default function Watch() {
 		setShowPlaylist((prevState) => !prevState);
 	}
 
+	function handlePlaylistClose() {
+		setShowPlaylist(false);
+	}
+
 	function handleLayoutToggle() {
 		if (manualGridColSize === 'auto') {
 			setManualGridColSize(1);
@@ -237,6 +241,15 @@ export default function Watch() {
 	}
 
 	function handleRedirect() {
+		window.history.pushState(
+			null,
+			'',
+			window.location.origin + window.location.pathname
+		);
+		setVideoListData([]);
+	}
+
+	function clearPlaylist() {
 		window.history.pushState(
 			null,
 			'',
@@ -317,6 +330,8 @@ export default function Watch() {
 							<Playlist
 								navbarVisible={showNavbar}
 								playlist={videoListData}
+								closePlaylist={handlePlaylistClose}
+								clearPlaylist={clearPlaylist}
 								removeVideo={handleRemoveVideo}
 								reorderVideo={handleReorderVideo}
 							/>
